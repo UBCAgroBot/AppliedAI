@@ -1,0 +1,60 @@
+[0.059s] Invoking command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline
+[0.105s] -- The C compiler identification is GNU 11.4.0
+[0.151s] -- The CXX compiler identification is GNU 11.4.0
+[0.157s] -- Detecting C compiler ABI info
+[0.213s] -- Detecting C compiler ABI info - done
+[0.219s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.219s] -- Detecting C compile features
+[0.220s] -- Detecting C compile features - done
+[0.223s] -- Detecting CXX compiler ABI info
+[0.294s] -- Detecting CXX compiler ABI info - done
+[0.301s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.301s] -- Detecting CXX compile features
+[0.301s] -- Detecting CXX compile features - done
+[0.303s] -- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.615s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+[0.666s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.682s] -- Found rclpy: 3.3.11 (/opt/ros/humble/share/rclpy/cmake)
+[0.683s] -- Found sensor_msgs: 4.2.3 (/opt/ros/humble/share/sensor_msgs/cmake)
+[0.708s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.712s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.718s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.729s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.744s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.911s] -- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+[0.924s] -- Found ament_lint_auto: 0.12.9 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[1.007s] -- Added test 'cppcheck' to perform static code analysis on C / C++ code
+[1.008s] -- Configured cppcheck include dirs: 
+[1.008s] -- Configured cppcheck exclude dirs and/or files: 
+[1.008s] -- Added test 'flake8' to check Python code syntax and style conventions
+[1.010s] -- Added test 'lint_cmake' to check CMake code style
+[1.011s] -- Added test 'pep257' to check Python code against some of the docstring style conventions in PEP 257
+[1.016s] -- Added test 'uncrustify' to check C / C++ code style
+[1.016s] -- Configured uncrustify additional arguments: 
+[1.017s] -- Added test 'xmllint' to check XML markup files
+[1.019s] -- Configuring done
+[1.022s] -- Generating done
+[1.023s] -- Build files have been written to: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline
+[1.030s] Invoked command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline
+[1.032s] Invoking command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline -- -j8 -l8
+[1.063s] Invoked command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --build /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline -- -j8 -l8
+[1.091s] Invoking command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline
+[1.097s] -- Install configuration: ""
+[1.097s] -- Execute custom install script
+[1.098s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ament_index/resource_index/package_run_dependencies/ishaan_test_pipeline
+[1.107s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ament_index/resource_index/parent_prefix_path/ishaan_test_pipeline
+[1.116s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/environment/ament_prefix_path.sh
+[1.124s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/environment/ament_prefix_path.dsv
+[1.133s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/environment/path.sh
+[1.140s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/environment/path.dsv
+[1.147s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/local_setup.bash
+[1.154s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/local_setup.sh
+[1.161s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/local_setup.zsh
+[1.167s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/local_setup.dsv
+[1.174s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/package.dsv
+[1.181s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ament_index/resource_index/packages/ishaan_test_pipeline
+[1.188s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/cmake/ament_cmake_export_dependencies-extras.cmake
+[1.194s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/cmake/ishaan_test_pipelineConfig.cmake
+[1.200s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/cmake/ishaan_test_pipelineConfig-version.cmake
+[1.208s] -- Symlinking: /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/ishaan_test_pipeline/share/ishaan_test_pipeline/package.xml
+[1.216s] Invoked command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline' returned '0': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake --install /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/ishaan_test_pipeline

@@ -1,0 +1,38 @@
+[0.056s] Invoking command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/Ishaan_Test_Pipeline': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/Ishaan_Test_Pipeline
+[0.097s] -- The C compiler identification is GNU 11.4.0
+[0.146s] -- The CXX compiler identification is GNU 11.4.0
+[0.152s] -- Detecting C compiler ABI info
+[0.226s] -- Detecting C compiler ABI info - done
+[0.238s] -- Check for working C compiler: /usr/bin/cc - skipped
+[0.238s] -- Detecting C compile features
+[0.238s] -- Detecting C compile features - done
+[0.242s] -- Detecting CXX compiler ABI info
+[0.332s] -- Detecting CXX compiler ABI info - done
+[0.341s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.341s] -- Detecting CXX compile features
+[0.341s] -- Detecting CXX compile features - done
+[0.343s] -- Found ament_cmake: 1.3.6 (/opt/ros/humble/share/ament_cmake/cmake)
+[0.642s] -- Found Python3: /usr/bin/python3.10 (found version "3.10.12") found components: Interpreter 
+[0.691s] -- Override CMake install command with custom implementation using symlinks instead of copying resources
+[0.708s] -- Found rclpy: 3.3.11 (/opt/ros/humble/share/rclpy/cmake)
+[0.709s] -- Found sensor_msgs: 4.2.3 (/opt/ros/humble/share/sensor_msgs/cmake)
+[0.735s] -- Found rosidl_generator_c: 3.1.5 (/opt/ros/humble/share/rosidl_generator_c/cmake)
+[0.738s] -- Found rosidl_adapter: 3.1.5 (/opt/ros/humble/share/rosidl_adapter/cmake)
+[0.744s] -- Found rosidl_generator_cpp: 3.1.5 (/opt/ros/humble/share/rosidl_generator_cpp/cmake)
+[0.754s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.768s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.941s] -- Found cv_bridge: 3.2.1 (/opt/ros/humble/share/cv_bridge/cmake)
+[0.954s] -- Found ament_lint_auto: 0.12.9 (/opt/ros/humble/share/ament_lint_auto/cmake)
+[0.995s] WARNING: Package name "Ishaan_Test_Pipeline" does not follow the naming conventions. It should start with a lower case letter and only contain lower case letters, digits, underscores, and dashes.
+[1.003s] [31mCMake Error at /opt/ros/humble/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:53 (message):
+[1.003s]   ament_package_xml() package name 'Ishaan_Test_Pipeline' in '/package.xml'
+[1.003s]   does not match current PROJECT_NAME 'ishaan_test_pipeline'.  You must call
+[1.003s]   project() with the same package name before.
+[1.003s] Call Stack (most recent call first):
+[1.003s]   /opt/ros/humble/share/ament_lint_auto/cmake/ament_lint_auto_find_test_dependencies.cmake:31 (ament_package_xml)
+[1.003s]   CMakeLists.txt:31 (ament_lint_auto_find_test_dependencies)
+[1.003s] 
+[1.003s] [0m
+[1.003s] -- Configuring incomplete, errors occurred!
+[1.003s] See also "/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/Ishaan_Test_Pipeline/CMakeFiles/CMakeOutput.log".
+[1.009s] Invoked command in '/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/build/Ishaan_Test_Pipeline' returned '1': CMAKE_PREFIX_PATH=/opt/ros/humble /usr/bin/cmake /home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline -DAMENT_CMAKE_SYMLINK_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/home/ishaan_datta/AppliedAI/23-I-12_SysArch/Experiments/ishaan_test_pipeline/install/Ishaan_Test_Pipeline
