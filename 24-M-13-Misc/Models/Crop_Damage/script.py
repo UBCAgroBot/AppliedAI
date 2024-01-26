@@ -19,11 +19,9 @@ train = pd.read_csv(f'{DATASET_DIR}/Train.csv')
 skf = StratifiedKFold(n_splits=N_FOLDS, shuffle=True, random_state=SEED)
 train_data = prepare_train_data(train, skf, IMAGE_DIR)
 
-# Training
 if SWITCHES['TRAINING']:
     train_model(train_data)
 
-# Testing
 if SWITCHES['TESTING']:
     eval_model(train_data)
 
