@@ -12,7 +12,9 @@ DATASET_DIR = '../../Dataset/Zindi_Crop_Damage'
 IMAGE_DIR = DATASET_DIR + '/images'
 
 SWITCHES = {
-  'REDUCED_TRAINING_SET': True
+  'REDUCED_TRAINING_SET': True,
+  "TRAINING": True,
+  "TESTING": False 
 }
 
 REDUCED_TRAINING_SIZE = 100

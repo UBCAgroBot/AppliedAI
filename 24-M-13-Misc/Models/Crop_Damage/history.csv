@@ -12,3 +12,4 @@ epoch,train_loss,valid_loss,cross_entropy,time
 0,0.5853018760681152,0.4642556607723236,0.3461218476295471,01:35
 epoch,train_loss,valid_loss,cross_entropy,time
 0,0.6205020546913147,0.4755662679672241,0.3558878004550934,03:14
+epoch,train_loss,valid_loss,cross_entropy,time
