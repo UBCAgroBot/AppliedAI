@@ -1,4 +1,0 @@
-source;share/ishaan_test_pipeline/local_setup.bash
-source;share/ishaan_test_pipeline/local_setup.dsv
-source;share/ishaan_test_pipeline/local_setup.sh
-source;share/ishaan_test_pipeline/local_setup.zsh

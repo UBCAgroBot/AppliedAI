@@ -1,8 +1,0 @@
-source;share/ishaan_test_pipeline/hook/cmake_prefix_path.ps1
-source;share/ishaan_test_pipeline/hook/cmake_prefix_path.dsv
-source;share/ishaan_test_pipeline/hook/cmake_prefix_path.sh
-source;share/ishaan_test_pipeline/local_setup.bash
-source;share/ishaan_test_pipeline/local_setup.dsv
-source;share/ishaan_test_pipeline/local_setup.ps1
-source;share/ishaan_test_pipeline/local_setup.sh
-source;share/ishaan_test_pipeline/local_setup.zsh
