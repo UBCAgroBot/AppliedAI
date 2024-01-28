@@ -20,7 +20,7 @@ class CNNNode(Node):
     
     def process_data(self, data):
         # Load model from file
-        model = tf.keras.models.load_model('/home/ishaan_datta/Downloads/model.h5')
+        model = tf.keras.models.load_model('/home/ishaan_datta/Downloads/model.h5') # replace with general directory within resource?
         # Normalize image values
         print(type(data))
         data = np.array(data)
