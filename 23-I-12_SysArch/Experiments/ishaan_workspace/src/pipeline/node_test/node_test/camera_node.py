@@ -5,6 +5,7 @@ from keras.datasets import fashion_mnist
 import numpy as np
 from std_msgs.msg import Header
 from rclpy.time import Time
+import sys
 
 class ImagePublisher(Node):
     def __init__(self):
@@ -15,8 +16,6 @@ class ImagePublisher(Node):
         (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
         self.image_data = test_images
         self.index = 0
-        
-        
 
     def publish_image(self):
         header = Header()
@@ -33,6 +32,8 @@ class ImagePublisher(Node):
         image_msg.is_bigendian = 0 
         image_msg.step = width 
         image_msg.data = image_data.flatten().tobytes()
+        msg_size = sys.getsizeof(image_msg) #compression later? -> pseudo network bandwidth measurement, sum total bytes of all data sent, divide by time elapsed for average bandwidth
+        
         
         self.model_publisher.publish(image_msg)
         # self.get_logger().info(self.index) #figure out logging
