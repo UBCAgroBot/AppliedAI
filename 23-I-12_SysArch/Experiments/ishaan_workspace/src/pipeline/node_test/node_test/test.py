@@ -4,3 +4,6 @@ from keras.datasets import fashion_mnist
 image_data = test_images
 
 print(type(image_data[0]))
+# ros2 run note_test jetson_node
+# colcon build --packages-select node_test
+# source install/setup.bash
