@@ -19,3 +19,5 @@ print(type(image_data[0]))
 # The subscriber’s constructor and callback don’t include any timer definition, because it doesn’t need one. Its callback gets called as soon as it receives a message.
 # It’s good practice to run rosdep in the root of your workspace (ros2_ws) to check for missing dependencies before building: rosdep install -i --from-path src --rosdistro humble -y
 # colcon test to test packages just built
+
+# development vs execute environment docker containers
