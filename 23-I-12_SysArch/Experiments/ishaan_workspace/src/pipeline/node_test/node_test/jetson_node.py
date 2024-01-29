@@ -65,6 +65,7 @@ class CNNNode(Node):
 
 # colcon build --packages-select node_test
 # make it delay sending until package is received and processed (buffer processing)
+# max cpu usage, initialized variable + comparison, average using metrics later, how to find process IDs
 
 def main(args=None):
     rclpy.init(args=args)
