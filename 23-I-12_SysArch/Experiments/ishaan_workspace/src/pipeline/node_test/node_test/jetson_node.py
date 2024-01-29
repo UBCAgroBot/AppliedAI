@@ -8,6 +8,7 @@ import time
 import psutil
 
 #self.get_logger().info(f"Received: {msg.header}") works, logger file and to terminal would be nice -> dedicated module
+# header information should be passed from camera node with metrics logged from that side and all in csv or what?
 
 class CNNNode(Node):
     def __init__(self):

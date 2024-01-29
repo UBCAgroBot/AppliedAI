@@ -7,13 +7,12 @@ print(type(image_data[0]))
 # ros2 run node_test jetson_node
 # colcon build --packages-select node_test -> --symlink-install
 
-# metrics logging file
-# use open CV pipleine w/ bridge
 # simple yolo bounding + launch window
-# node architecture testing via launch file
+# node architecture testing via launch file -> with dashboard
 # record highest value in header
 # !!! rgbd camera considerations...
 # make zed camrea feed publisher + start tet yolo application + viewer window -> how test acc?
+# bash file some commands for sourcing fucked up
 
 # ensure exec_depend in package.xml matches node's import statements
 # The subscriber’s constructor and callback don’t include any timer definition, because it doesn’t need one. Its callback gets called as soon as it receives a message.
