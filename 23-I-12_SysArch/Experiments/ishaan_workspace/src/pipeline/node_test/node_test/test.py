@@ -15,23 +15,31 @@ print(type(image_data[0]))
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug",
-            "type": "node",
+            "name": "Python: Debug",
+            "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/index.js",
-            "stopOnEntry": false,
-            "args": [],
+            "program": "${workspaceFolder}/your_script.py",
             "cwd": "${workspaceFolder}",
+            "stopOnEntry": false,
+            "pythonPath": "${config:python.pythonPath}",
+            "debugOptions": [
+                "WaitOnAbnormalExit",
+                "WaitOnNormalExit",
+                "RedirectOutput"
+            ],
+            "args": [],
+            "env": {},
+            "envFile": "${workspaceFolder}/.env",
             "preLaunchTask": null,
+            "postDebugTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
-                "--nolazy"
+                "-c",
+                "exec(open('.vscode/your_environment_setup.py').read())"
             ],
-            "env": {
-                "NODE_ENV": "development"
-            },
-            "sourceMaps": false,
-            "outFiles": []
+            "console": "internalConsole",
+            "stopOnEntry": false
         }
     ]
 }
+
