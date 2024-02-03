@@ -10,37 +10,3 @@ print(type(image_data[0]))
 # The subscriber’s constructor and callback don’t include any timer definition, because it doesn’t need one. Its callback gets called as soon as it receives a message.
 # It’s good practice to run rosdep in the root of your workspace (ros2_ws) to check for missing dependencies before building: rosdep install -i --from-path src --rosdistro humble -y
 # colcon test to test packages just built
-
-# new change
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Python: Debug",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/your_script.py",
-            "cwd": "${workspaceFolder}",
-            "stopOnEntry": false,
-            "pythonPath": "${config:python.pythonPath}",
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ],
-            "args": [],
-            "env": {},
-            "envFile": "${workspaceFolder}/.env",
-            "preLaunchTask": null,
-            "postDebugTask": null,
-            "runtimeExecutable": null,
-            "runtimeArgs": [
-                "-c",
-                "exec(open('.vscode/your_environment_setup.py').read())"
-            ],
-            "console": "internalConsole",
-            "stopOnEntry": false
-        }
-    ]
-}
-
