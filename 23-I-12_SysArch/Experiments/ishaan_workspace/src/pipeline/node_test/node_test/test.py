@@ -11,6 +11,7 @@ print(type(image_data[0]))
 # It’s good practice to run rosdep in the root of your workspace (ros2_ws) to check for missing dependencies before building: rosdep install -i --from-path src --rosdistro humble -y
 # colcon test to test packages just built
 
+# new change
 {
     "version": "0.2.0",
     "configurations": [
