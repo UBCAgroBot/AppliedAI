@@ -6,17 +6,32 @@ image_data = test_images
 print(type(image_data[0]))
 # ros2 run node_test jetson_node
 # colcon build --packages-select node_test -> --symlink-install
-
-# simple yolo bounding + launch window
-# node architecture testing via launch file -> with dashboard
-# record highest value in header
-# !!! rgbd camera considerations...
-# make zed camrea feed publisher + start tet yolo application + viewer window -> how test acc?
-# bash file some commands for sourcing fucked up
-
 # ensure exec_depend in package.xml matches node's import statements
 # The subscriber’s constructor and callback don’t include any timer definition, because it doesn’t need one. Its callback gets called as soon as it receives a message.
 # It’s good practice to run rosdep in the root of your workspace (ros2_ws) to check for missing dependencies before building: rosdep install -i --from-path src --rosdistro humble -y
 # colcon test to test packages just built
 
-# development vs execute environment docker containers
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/index.js",
+            "stopOnEntry": false,
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": null,
+            "runtimeExecutable": null,
+            "runtimeArgs": [
+                "--nolazy"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "sourceMaps": false,
+            "outFiles": []
+        }
+    ]
+}
