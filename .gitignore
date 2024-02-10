@@ -3,6 +3,7 @@
 23-I-12_SysArch/Experiments/ishaan_workspace/install/
 23-I-12_SysArch/Experiments/ishaan_workspace/log/
 23-I-12_SysArch/Experiments/ishaan_workspace/src/examples/
+.vscode
 
 # Don't ignore src/pipeline
 !23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/
