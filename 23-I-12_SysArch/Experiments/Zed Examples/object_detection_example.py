@@ -1,7 +1,7 @@
 import pyzed.sl as sl
 import cv2
 import numpy as np
-# import tensorrt
+import tensorrt
 
 def main():
     # Create a Camera object
