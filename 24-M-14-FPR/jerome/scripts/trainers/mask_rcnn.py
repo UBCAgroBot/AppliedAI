@@ -9,7 +9,7 @@ from tqdm import tqdm
 # Q: what is the difference between fork and spawn in relation to PyTorch?
 #    What is __name__?
 # Q: Python spawn multithreading?
-if __name__ == '__main__':
+def train_and_evaluate_maskrcnn():
     # MPS issues
     # device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
     device = torch.device('cpu')

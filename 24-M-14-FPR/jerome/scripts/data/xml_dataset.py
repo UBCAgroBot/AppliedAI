@@ -10,7 +10,7 @@ class XMLDatasetPyTorch(Dataset):
         self.image_dir = image_dir
         self.transforms = transforms
 
-        images_and_xml = list(sorted(os.listdir(image_dir)))[:10] # TODO - remove
+        images_and_xml = list(sorted(os.listdir(image_dir)))[:200] # TODO - remove
 
         self.images = []
         self.xml = []
@@ -32,8 +32,20 @@ class XMLDatasetPyTorch(Dataset):
           image = self.transforms(image)
         
         target = {}
+
+
         target["boxes"] = torch.tensor(annotations['boxes'], dtype=torch.float32)
+
+        area = (target['boxes'][:, 3] - target['boxes'][:, 1]) * (target['boxes'][:, 2] - target['boxes'][:, 0])
+
+        # set iscrowd for all instances equal to 0. Setting instance's iscrowd to 1 ignores 
+        # it during evaluation (which we don't want to do)
+        iscrowd = torch.zeros((len(annotations["labels"])), dtype=torch.int64)
+
         target["labels"] = torch.tensor(annotations['labels'], dtype=torch.int64)
+        target["image_id"] = idx
+        target["area"] = area
+        target["iscrowd"] = iscrowd
         
         return image, target
 
