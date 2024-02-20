@@ -1,0 +1,16 @@
+.pth 
+**/*.pth 
+.png
+**/*.png
+.jpg
+**/*.jpg
+.xml
+**/*.xml
+__pycache__
+**/__pycache__
+.env
+**/.env
+.txt
+**/*.txt
+.en
+**/.en
