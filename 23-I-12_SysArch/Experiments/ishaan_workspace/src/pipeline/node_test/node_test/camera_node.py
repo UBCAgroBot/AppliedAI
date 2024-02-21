@@ -44,6 +44,7 @@ class ImagePublisher(Node):
             except CvBridgeError as e:
                 self.get_logger().info(e)
                 print(e)
+                
             image_msg.header = header
             image_msg.is_bigendian = 0 
             image_msg.step = image_msg.width * 3
