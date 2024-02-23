@@ -3,7 +3,7 @@ from scripts.data.augmentations import get_transform
 from scripts.data.xml_dataset import XMLDatasetPyTorch
 from scripts.models.frcnn import get_model
 from scripts.helpers import utils
-from scripts.config.config import TRAIN_DIR, TEST_DIR, VALIDATE_DIR
+from scripts.config.config import TRAIN_DIR, TEST_DIR, VALIDATE_DIR, NUM_CORES
 import torch
 from tqdm import tqdm
 
@@ -20,7 +20,7 @@ def train_and_evaluate_frcnn():
       dataset,
       batch_size=2,
       shuffle=True,
-      num_workers=0,
+      num_workers=NUM_CORES,
       collate_fn=utils.collate_fn
     )
 
@@ -28,7 +28,7 @@ def train_and_evaluate_frcnn():
       dataset_test,
       batch_size=1,
       shuffle=False,
-      num_workers=0, 
+      num_workers=NUM_CORES, 
       collate_fn=utils.collate_fn
     )
 

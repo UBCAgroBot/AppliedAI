@@ -16,3 +16,6 @@ CLASS_CODES_MAP = [
 TRAIN_DIR = 'data/blueberries/train'
 TEST_DIR = 'data/blueberries/test'
 VALIDATE_DIR = 'data/blueberries/validate'
+
+# CLOUD COMPUTING SETTINGS
+NUM_CORES = 0
