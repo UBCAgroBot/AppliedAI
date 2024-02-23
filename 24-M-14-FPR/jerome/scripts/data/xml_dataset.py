@@ -10,10 +10,11 @@ class XMLDatasetPyTorch(Dataset):
         self.image_dir = image_dir
         self.transforms = transforms
 
-        images_and_xml = list(sorted(os.listdir(image_dir)))[:200] # TODO - remove
+        images_and_xml = list(sorted(os.listdir(image_dir)))
 
         self.images = []
         self.xml = []
+        # This logic is too brittle
         for idx in range(0, len(images_and_xml), 2):
           self.images.append(images_and_xml[idx])
           self.xml.append(images_and_xml[idx+1])
@@ -33,10 +34,13 @@ class XMLDatasetPyTorch(Dataset):
         
         target = {}
 
-
         target["boxes"] = torch.tensor(annotations['boxes'], dtype=torch.float32)
 
-        area = (target['boxes'][:, 3] - target['boxes'][:, 1]) * (target['boxes'][:, 2] - target['boxes'][:, 0])
+        area = 0
+
+        # guard against possibility of there being no bounding boxes in the XML
+        if len(target["boxes"]) > 0:
+          area = (target['boxes'][:, 3] - target['boxes'][:, 1]) * (target['boxes'][:, 2] - target['boxes'][:, 0])
 
         # set iscrowd for all instances equal to 0. Setting instance's iscrowd to 1 ignores 
         # it during evaluation (which we don't want to do)
@@ -64,5 +68,35 @@ class XMLDatasetPyTorch(Dataset):
             annotations["boxes"].append([xmin, ymin, xmax, ymax])
             annotations["labels"].append(CLASSES[obj.find('name').text.lower()])
         return annotations
+    
+"""
+STARTER CODE FOR DYNAMICALLY CREATING A TENSORFLOW DATASET FROM A PYTORCH DATASET
+src: ChatGPT
 
-# TODO - XML Dataset tensorflow after successful PyTorch workflow
+```
+import tensorflow as tf
+
+# Instantiate the PyTorch dataset
+pytorch_dataset = XMLDatasetPyTorch(image_dir="path_to_images")
+
+# Create TensorFlow dataset using `from_generator`
+tf_dataset = tf.data.Dataset.from_generator(
+    generator=lambda: pytorch_dataset,
+    output_signature=(
+        tf.TensorSpec(shape=pytorch_dataset[0][0].shape, dtype=tf.uint8),  # image
+        {
+            "boxes": tf.TensorSpec(shape=[None, 4], dtype=tf.float32),      # boxes
+            "labels": tf.TensorSpec(shape=[None], dtype=tf.int64),          # labels
+            "image_id": tf.TensorSpec(shape=(), dtype=tf.int32),            # image_id
+            "area": tf.TensorSpec(shape=[None], dtype=tf.float32),          # area
+            "iscrowd": tf.TensorSpec(shape=[None], dtype=tf.int64)          # iscrowd - read note above on what iscrowd is
+        }
+    )
+)
+
+# Iterate over the TensorFlow dataset
+for image, target in tf_dataset:
+    # Process each sample in the TensorFlow dataset
+    pass
+```
+"""

@@ -12,3 +12,7 @@ CLASS_CODES_MAP = [
   'unripe',     # 1 => unripe
   'ripe',       # 2 => ripe
 ]
+
+TRAIN_DIR = 'data/blueberries/train'
+TEST_DIR = 'data/blueberries/test'
+VALIDATE_DIR = 'data/blueberries/validate'

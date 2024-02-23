@@ -3,6 +3,7 @@ from scripts.data.augmentations import get_transform
 from scripts.data.xml_dataset import XMLDatasetPyTorch
 from scripts.models.frcnn import get_model
 from scripts.helpers import utils
+from scripts.config.config import TRAIN_DIR, TEST_DIR, VALIDATE_DIR
 import torch
 from tqdm import tqdm
 
@@ -14,10 +15,8 @@ def train_and_evaluate_frcnn():
     torch.manual_seed(RANDOM_SEED)
 
     num_classes = 3
-    dataset = XMLDatasetPyTorch('data/blueberries/all_data', get_transform(train=True))
-    # TODO - make 3 folders - train, test, valid. Randomly split XML + Image pairs into those folders via 
-    #        a python script 
-    dataset_test = XMLDatasetPyTorch('data/blueberries/all_data', get_transform(train=False))
+    dataset = XMLDatasetPyTorch(TRAIN_DIR, get_transform(train=True))
+    dataset_test = XMLDatasetPyTorch(TEST_DIR, get_transform(train=False))
 
     data_loader_train = torch.utils.data.DataLoader(
       dataset,
@@ -54,7 +53,7 @@ def train_and_evaluate_frcnn():
             gamma=0.1 # every 3 epochs, multiple currently learning rate by 0.1
     )
 
-    num_epochs = 20
+    num_epochs = 30
 
     print(f'--- TRAINING ALL EPOCHS ---')
 
@@ -64,11 +63,26 @@ def train_and_evaluate_frcnn():
         lr_scheduler.step()
         print(f'--- EVAULATING MODEL FOR EPOCH {epoch} ----')
         evaluate(model, data_loader_test, device=device)
+        if epoch % 2 == 0:
+          print(f'--- SAVING THE MODEL ---')
+          torch.save(model.state_dict(), f'./saved_models/model_frcnn_{epoch}.pth')
 
-    print(f'--- SAVING THE MODEL ---')
-    torch.save(model.state_dict(), './saved_models/model_frcnn.pth')
+def data_integrity_check():
+    dataset = XMLDatasetPyTorch(TRAIN_DIR, get_transform(train=True))
+    dataset_test = XMLDatasetPyTorch(TEST_DIR, get_transform(train=False))
+    print(len(dataset))
+    print(len(dataset_test))
 
-    # TODO: 
-    # 2. Finish PyTorch workflow - train quickly on local machine
-    # 3. Build a Tensorflow dataset based on torch dataset
+    train_c = 0
+    for (image, target) in dataset:
+      train_c += 1
+
+    test_c = 0
+    for (image, target) in dataset_test:
+      print("success train!")
+      test_c += 1
+    
+    print(train_c)
+    print(test_c)
+        
 
