@@ -16,3 +16,4 @@ __pycache__
 **/*.en
 .zip
 **/*.zip
+__MACOSX
