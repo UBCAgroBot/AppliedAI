@@ -8,9 +8,7 @@ import torch
 from tqdm import tqdm
 
 def train_and_evaluate_frcnn():
-    # MPS issues
-    # device = torch.device('mps') if torch.backends.mps.is_available() else torch.device('cpu')
-    device = torch.device('cpu')
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     RANDOM_SEED = 42
     torch.manual_seed(RANDOM_SEED)
 
