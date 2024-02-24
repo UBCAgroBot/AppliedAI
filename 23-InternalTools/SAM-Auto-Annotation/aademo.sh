@@ -8,10 +8,10 @@
 #SBATCH --mem=16GB
 #SBATCH --job-name=aa_test
 #SBATCH --account=st-sielmann-1-gpu
-#SBATCH --mail-user=mali8@student.ubc.ca
+#SBATCH --mail-user=<your-email>
 #SBATCH --mail-type=ALL
-#SBATCH --output=/scratch/st-sielmann-1/agrobot/auto-annotation-demo/out.txt
-#SBATCH --error=/scratch/st-sielmann-1/agrobot/auto-annotation-demo/error.txt
+#SBATCH --output=<path-to-Working-Directory>/out.txt
+#SBATCH --error=<path-to-Working-Directory>/error.txt
 
 ############################################################################################################################
 
