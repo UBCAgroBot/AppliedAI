@@ -9,6 +9,7 @@ from rclpy.node import Node
 from std_msgs.msg import String
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
+from ultralytics import YOLO
 
 import tensorflow as tf #!!! this and numpy compatibilty issue > numpy needs to be higher version for zed camera, but requires lower version for tensorflow -> build from source?
 import numpy as np # onnx to load model and optimize?
@@ -19,7 +20,7 @@ class CNNNode(Node):
         self.bridge = CvBridge()
         self.model_publisher = self.create_publisher(String, 'bounding_box_coords', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
-        # self.model = 
+        #self.model = YOLO(weights)
     
     def callback(self, msg):
         self.get_logger().info(f"Received: {msg.header}")
