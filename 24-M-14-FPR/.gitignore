@@ -13,4 +13,7 @@ __pycache__
 .txt
 **/*.txt
 .en
-**/.en
+**/*.en
+.zip
+**/*.zip
+__MACOSX
