@@ -9,6 +9,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
 from cv_bridge import CvBridge, CvBridgeError
+from example_interfaces.srv import Trigger
 
 class ImagePublisher(Node):
     def __init__(self):
@@ -17,7 +18,9 @@ class ImagePublisher(Node):
         self.download_path = str(Path.home() / 'Downloads')
         self.frames = self.import_image_files()
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
+        self.srv = self.create_service(Trigger, 'image_data_service', self.image_service)
         self.publish_image()
+        self.index = 0
     
     def import_image_files(self):
         images = []
@@ -30,6 +33,19 @@ class ImagePublisher(Node):
     def import_image_frames(self):
         # zed implementation goes here
         pass
+    
+    def image_service(self, request, response):
+        image = self.frames[self.index]
+        try:
+            image_msg = self.bridge.cv2_to_imgmsg(image, encoding="bgr8")
+        except CvBridgeError as e:
+            self.get_logger().info(e)
+            print(e)
+            return
+        
+        response.success = True
+        response.message = image_msg
+        return response
 
     def publish_image(self):
         tic = time.perf_counter()
