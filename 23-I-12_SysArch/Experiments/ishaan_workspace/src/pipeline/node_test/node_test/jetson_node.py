@@ -11,7 +11,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from ultralytics import YOLO
 
-import tensorflow as tf #!!! this and numpy compatibilty issue > numpy needs to be higher version for zed camera, but requires lower version for tensorflow -> build from source?
+# import tensorflow as tf #!!! this and numpy compatibilty issue > numpy needs to be higher version for zed camera, but requires lower version for tensorflow -> build from source?
 import numpy as np # onnx to load model and optimize?
 
 class CNNNode(Node):
