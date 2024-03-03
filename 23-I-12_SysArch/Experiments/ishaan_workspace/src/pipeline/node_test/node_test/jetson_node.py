@@ -20,7 +20,7 @@ class CNNNode(Node):
         self.bridge = CvBridge()
         self.model_publisher = self.create_publisher(String, 'bounding_box_coords', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
-        #self.model = YOLO(weights)
+        self.model = YOLO(weights)
     
     def callback(self, msg):
         self.get_logger().info(f"Received: {msg.header}")
