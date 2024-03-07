@@ -62,7 +62,8 @@ class JetsonNode(Node):
         tic = time.perf_counter_ns()
         pre_mem = psutil.Process(pid).memory_percent()
         pre_cpu = psutil.Process(pid).cpu_percent(interval=None)
-        result = self.model(data)[0]
+        # result = self.model(data)[0]
+        self.high_precision_sleep(0.001)
         post_cpu = psutil.Process(pid).cpu_percent(interval=None)
         post_mem = psutil.Process(self.pid).memory_percent()
         toc = time.perf_counter_ns()

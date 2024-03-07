@@ -12,16 +12,19 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 from example_interfaces.srv import Trigger
 
+# tqdm threading later or moving average in display node
+# run display node on my computer -> display metric node
+
 class DisplayNode(Node):
     def __init__(self):
         super().__init__('display_node') #type:ignore
         self.bridge = CvBridge()
         self.box_subscriber = self.create_subscription(String, 'bounding_boxes', self.callback, 10)
-        self.client = self.create_client(Trigger, 'image_data_service')
         self.off_subscriber = self.create_subscription(String, 'off', self.display_metrics, 10)
         self.boxes, self.total_mem, self.total_cpu, self.total_exec, self.total_latency, self.frame_id, self.total_frames, self.fps, self.id, self.gpu, self.gpu_mem = None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         self.metrics = [self.total_cpu, self.total_mem, self.total_exec, self.total_latency, self.gpu, self.gpu_mem]
     
+    # use milliseconds instead?
     loop = Timeloop()
     @loop.job(interval=timedelta(seconds=1.000))
     def fps_counter(self):
@@ -30,30 +33,10 @@ class DisplayNode(Node):
 
     def callback(self, msg):
         self.boxes = msg.data
-        
         metric_list = msg.header.split(' ')
         for index, metric in enumerate(self.metrics[1:len(self.metrics) - 1]):
             self.metric += metric_list[index + 1]
         self.total_frames = metric_list[0]
-        
-        req = Trigger.Request()
-        future = self.client.call_async(req)
-        future.add_done_callback(self.future_callback)
-    
-    # write launch parameter to change this type
-    def future_callback(self, future):
-        try:
-            response = future.result()
-            if response.success:
-                image_data = response.message  # Assuming the message is the image data
-                try:
-                    cv_image = self.bridge.imgmsg_to_cv2(image_data, "8UC4")
-                except CvBridgeError as e:
-                    self.get_logger().info(e)
-                    print(e)
-                self.process_image(cv_image)
-        except Exception as e:
-            self.get_logger().error('Service call failed %r' % (e,))
 
     def process_image(self, cv_image):
         # assumed boxes is a list of bounding boxes represented as [x, y, w, h]
