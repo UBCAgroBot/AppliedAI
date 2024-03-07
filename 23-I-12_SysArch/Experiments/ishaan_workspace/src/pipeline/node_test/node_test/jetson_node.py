@@ -5,8 +5,7 @@ import psutil
 import GPUtil
 import supervision as sv
 from ultralytics import YOLO
-from numba import jit
-from typing import Callable, Any
+# from numba import jit
 
 import rclpy
 from rclpy.time import Time
