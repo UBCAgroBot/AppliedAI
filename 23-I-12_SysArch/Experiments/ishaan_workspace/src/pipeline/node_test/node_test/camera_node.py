@@ -1,4 +1,4 @@
-import time
+from time import perf_counter
 import sys
 import cv2
 import os
@@ -14,7 +14,7 @@ from example_interfaces.srv import Trigger
 
 class CameraNode(Node):
     def __init__(self):
-        super().__init__('image_publisher') #type: ignore
+        super().__init__('camera_node') #type: ignore
         self.bridge = CvBridge()
         self.download_path = str(Path.home() / 'Downloads')
         # replace self.camera with parameter
@@ -40,11 +40,8 @@ class CameraNode(Node):
     
     def camera_publisher(self):
         init = sl.InitParameters()
-        init.camera_resolution = sl.RESOLUTION.AUTO
-        init.camera_fps = 30
         cam = sl.Camera()
-        runtime = sl.RuntimeParameters()
-        mat = sl.Mat()
+
 
         if not cam.is_opened():
             print("Opening ZED Camera ")
@@ -52,24 +49,29 @@ class CameraNode(Node):
         if status != sl.ERROR_CODE.SUCCESS:
             print(repr(status))
             exit()
-
+        
+        runtime = sl.RuntimeParameters()
+        mat = sl.Mat()
+        self.tic = perf_counter()
+        
         key = ''
         while key != 113:  # for 'q' key
             err = cam.grab(runtime)
             if err == sl.ERROR_CODE.SUCCESS:
-                self.tic = time.perf_counter()
                 cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
                 self.index += 1
-                self.frames.append(mat.get_data())
-                cv2.imshow(f"ZED Camera Frame {self.index}", mat.get_data())
-                self.publish_image(mat.get_data())
+                image = mat.get_data()
+                self.frames.append(image)
+                cv2.imshow(f"ZED Camera", image)
+                self.publish_image(image)
                 key = cv2.waitKey(5)
             else:
                 key = cv2.waitKey(5)
-        self.done = True
-        cv2.destroyAllWindows()
+
+        cv2.destroyAllWindows()                
         cam.close()
-        print("ZED Camera closed ")
+        print("ZED Camera closed")
+        self.display_metrics()
     
     def image_service(self, request, response):
         req_frame = request.index
@@ -86,44 +88,42 @@ class CameraNode(Node):
         return response
 
     def publish_image(self, image):
-        if self.done != True:
-            header = Header()
-            header.stamp = self.get_clock().now().to_msg()
-            header.frame_id = str(self.index) 
+        header = Header()
+        header.stamp = self.get_clock().now().to_msg()
+        header.frame_id = str(self.index) 
 
-            try:
-                image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
-            except CvBridgeError as e:
-                self.get_logger().info(e)
-                print(e)
-                
-            image_msg.header = header
-            image_msg.is_bigendian = 0 
-            image_msg.step = image_msg.width * 3
+        try:
+            image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
+        except CvBridgeError as e:
+            self.get_logger().info(e)
+            print(e)
+            
+        image_msg.header = header
+        image_msg.is_bigendian = 0 
+        image_msg.step = image_msg.width * 3
 
-            self.model_publisher.publish(image_msg)
-            size = sys.getsizeof(image_msg)
-            self.get_logger().info(f'Published image frame: {self.index} with message size {size} bytes')
-            self.total_data += size
-        else:
-            self.off_publisher.publish("Done")
-            self.display_metrics()
+        self.model_publisher.publish(image_msg)
+        size = sys.getsizeof(image_msg)
+        self.get_logger().info(f'Published image frame: {self.index} with message size {size} bytes')
+        self.total_data += size
     
     def display_metrics(self):
-        toc = time.perf_counter()
+        msg = String()
+        msg.data = "Done"
+        self.off_publisher.publish(msg)
+        toc = perf_counter()
         bandwidth = self.total_data / (toc - self.tic)
-        self.get_logger().info(f'Published {len(self.frames)} images in {toc - self.tic:0.4f} seconds with average network bandwidth of {round(bandwidth)} bytes per second')
-        self.get_logger().info('Shutting down display node...')
+        self.get_logger().info(f'Published {len(self.frames)} images in {(toc - self.tic):.2f} seconds with average network bandwidth of {round(bandwidth)} bytes per second')
         raise SystemExit
 
 def main(args=None):
     rclpy.init(args=args)
-    image_publisher = CameraNode()
+    camera_node = CameraNode()
     try:
-        rclpy.spin(image_publisher)
+        rclpy.spin(camera_node)
     except SystemExit:
         rclpy.logging.get_logger("Quitting").info('Done')
-    image_publisher.destroy_node()
+    camera_node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
