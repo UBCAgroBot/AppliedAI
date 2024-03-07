@@ -74,11 +74,11 @@ class JetsonNode(Node):
         self.gpu = 0 # gpu.load*100
         self.gpu_mem = 0 # (gpu.memoryUsed / gpu.memoryTotal) * 100
         
-        # self.get_logger.info(f"CPU usage: {self.cpu}%")
-        # self.get_logger.info(f"GPU usage: {self.gpu}%")
-        # self.get_logger.info(f"GPU VRAM usage: {self.gpu_mem}%")
-        # self.get_logger.info(f"Memory usage: {self.mem}%")
-        # self.get_logger.info(f"Execution time: {self.time} milliseconds")
+        # self.get_logger().info(f"CPU usage: {self.cpu}%")
+        # self.get_logger().info(f"GPU usage: {self.gpu}%")
+        # self.get_logger().info(f"GPU VRAM usage: {self.gpu_mem}%")
+        # self.get_logger().info(f"Memory usage: {self.mem}%")
+        self.get_logger().info(f"Execution time: {self.time} milliseconds")
         
         # detections = sv.Detections.from_ultralytics(result)
         # self.publish_result(detections)
@@ -92,7 +92,7 @@ class JetsonNode(Node):
         self.get_logger().info(msg.data)
     
     def display_metrics(self):
-        self.get_logger.info(f'Frame loss: {((self.frames/self.last_frame_id)*100):0.1f}')
+        self.get_logger().info(f'Frame loss: {((self.frames/self.last_frame_id)*100):0.1f}')
         raise SystemExit
 
 def main(args=None):
