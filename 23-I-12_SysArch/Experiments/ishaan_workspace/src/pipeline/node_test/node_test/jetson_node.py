@@ -29,7 +29,7 @@ class JetsonNode(Node):
         pass
     
     def callback(self, msg):
-        self.get_logger().info(f"Latency of {msg.header.frame_id} is {((self.get_clock().now().seconds - msg.header.stamp.sec) * 1e3 + (self.get_clock().now().nanoseconds - msg.header.stamp.nanosec) / 1e6)} milliseconds")
+        self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds - msg.header.stamp.nanoseconds) / 1e6} milliseconds")
         # self.get_logger().info(f"Received: {msg.header.frame_id}")
         # now = self.get_clock().now()
         # latency = now - Time.from_msg(msg.header.stamp)
@@ -101,14 +101,15 @@ def main(args=None):
     jetson_node = JetsonNode()
     try:
         rclpy.spin(jetson_node)
-    except SystemExit:   
-        print("josy...")
-        jetson_node.display_metrics()
-        rclpy.logging.get_logger("Quitting").info('Done')
     except KeyboardInterrupt:
         print("josy...")
         jetson_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
+    except SystemExit:   
+        print("josy...")
+        jetson_node.display_metrics()
+        rclpy.logging.get_logger("Quitting").info('Done')
+
     rclpy.spin(jetson_node)
     jetson_node.destroy_node()
     rclpy.shutdown()
