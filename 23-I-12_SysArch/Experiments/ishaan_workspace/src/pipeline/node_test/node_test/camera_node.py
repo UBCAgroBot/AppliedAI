@@ -18,7 +18,7 @@ class CameraNode(Node):
         self.bridge = CvBridge()
         self.download_path = str(Path.home() / 'Downloads')
         # replace self.camera with parameter
-        self.index, self.camera, self.type, self.total_data, self.done = 0, True, [], "8UC4", 0, False
+        self.index, self.camera, self.type, self.total_data = 0, True, "8UC4", 0
         self.off_publisher = self.create_publisher(String, 'off', 10)
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
 

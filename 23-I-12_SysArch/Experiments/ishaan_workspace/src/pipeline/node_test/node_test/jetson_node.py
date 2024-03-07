@@ -60,28 +60,28 @@ class JetsonNode(Node):
         pid = os.getpid()
 
         tic = time.perf_counter_ns()
-        pre_mem = psutil.Process(pid).memory_percent()
-        pre_cpu = psutil.Process(pid).cpu_percent(interval=None)
+        # pre_mem = psutil.Process(pid).memory_percent()
+        # pre_cpu = psutil.Process(pid).cpu_percent(interval=None)
         # result = self.model(data)[0]
         self.high_precision_sleep(0.001)
-        post_cpu = psutil.Process(pid).cpu_percent(interval=None)
-        post_mem = psutil.Process(self.pid).memory_percent()
+        # post_cpu = psutil.Process(pid).cpu_percent(interval=None)
+        # post_mem = psutil.Process(self.pid).memory_percent()
         toc = time.perf_counter_ns()
         
-        self.cpu = ((self.post_cpu-self.pre_cpu)/self.time) * 100
-        self.mem = post_mem - pre_mem
+        # self.cpu = ((self.post_cpu-self.pre_cpu)/self.time) * 100
+        # self.mem = post_mem - pre_mem
         self.time = (toc-tic)/1e6
         self.gpu = 0 # gpu.load*100
         self.gpu_mem = 0 # (gpu.memoryUsed / gpu.memoryTotal) * 100
         
-        self.get_logger.info(f"CPU usage: {self.cpu}%")
+        # self.get_logger.info(f"CPU usage: {self.cpu}%")
         # self.get_logger.info(f"GPU usage: {self.gpu}%")
         # self.get_logger.info(f"GPU VRAM usage: {self.gpu_mem}%")
-        self.get_logger.info(f"Memory usage: {self.mem}%")
-        self.get_logger.info(f"Execution time: {self.time} milliseconds")
+        # self.get_logger.info(f"Memory usage: {self.mem}%")
+        # self.get_logger.info(f"Execution time: {self.time} milliseconds")
         
-        detections = sv.Detections.from_ultralytics(result)
-        self.publish_result(detections)
+        # detections = sv.Detections.from_ultralytics(result)
+        # self.publish_result(detections)
     
     def publish_result(self, bounding_boxes):
         header = Header()
