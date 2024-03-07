@@ -103,7 +103,11 @@ def main(args=None):
     try:
         rclpy.spin(camera_node)
     except SystemExit:
+        camera_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
+    except KeyboardInterrupt:
+        rclpy.logging.get_logger("Quitting").info('Done')
+        camera_node.display_metrics()
     camera_node.destroy_node()
     rclpy.shutdown()
 

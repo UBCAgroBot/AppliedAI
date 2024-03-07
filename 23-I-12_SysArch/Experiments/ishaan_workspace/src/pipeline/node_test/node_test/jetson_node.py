@@ -29,17 +29,18 @@ class JetsonNode(Node):
         pass
     
     def callback(self, msg):
-        self.get_logger().info(f"Received: {msg.header}")
-        now = self.get_clock().now()
-        latency = now - Time.from_msg(msg.header.stamp)
-        print(f"Message transmisison latency: {latency.nanoseconds / 1e6} milliseconds")
-        self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
-        try:
-            cv_image  = self.bridge.imgmsg_to_cv2(msg)
-            self.detection(cv_image)
-        except CvBridgeError as e:
-            self.get_logger().info(e)
-            print(e)
+        self.get_logger().info(f"Received: {msg.header.frame_id} @ {self.get_clock().now().nanoseconds - msg.header.stamp.nanoseconds} nanoseconds")
+        # self.get_logger().info(f"Received: {msg.header.frame_id}")
+        # now = self.get_clock().now()
+        # latency = now - Time.from_msg(msg.header.stamp)
+        # print(f"Message transmisison latency: {latency.nanoseconds / 1e6} milliseconds")
+        # self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
+        # try:
+        #     cv_image  = self.bridge.imgmsg_to_cv2(msg)
+        #     self.detection(cv_image)
+        # except CvBridgeError as e:
+        #     self.get_logger().info(e)
+        #     print(e)
 
     def high_precision_sleep(self, duration):
         start_time = time.perf_counter()
@@ -78,7 +79,7 @@ class JetsonNode(Node):
         # self.get_logger().info(f"GPU usage: {self.gpu}%")
         # self.get_logger().info(f"GPU VRAM usage: {self.gpu_mem}%")
         # self.get_logger().info(f"Memory usage: {self.mem}%")
-        self.get_logger().info(f"Execution time: {self.time} milliseconds")
+        # self.get_logger().info(f"Execution time: {self.time} milliseconds")
         
         # detections = sv.Detections.from_ultralytics(result)
         # self.publish_result(detections)
@@ -102,6 +103,11 @@ def main(args=None):
         rclpy.spin(jetson_node)
     except SystemExit:   
         print("josy...")
+        jetson_node.display_metrics()
+        rclpy.logging.get_logger("Quitting").info('Done')
+    except KeyboardInterrupt:
+        print("josy...")
+        jetson_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
     rclpy.spin(jetson_node)
     jetson_node.destroy_node()
