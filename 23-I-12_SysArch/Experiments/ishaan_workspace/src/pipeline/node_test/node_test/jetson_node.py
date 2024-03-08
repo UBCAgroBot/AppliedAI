@@ -38,6 +38,8 @@ class JetsonNode(Node):
         # self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds() - msg.header.stamp.nanoseconds()) / 1e6} milliseconds")
         
         cv_image  = self.bridge.imgmsg_to_cv2(msg)
+        height, width, channels = cv_image.shape
+        print(height, width, channels)
         # cv2.imread(cv_image, cv2.IMREAD_COLOR)
         self.detection(cv_image)
         
