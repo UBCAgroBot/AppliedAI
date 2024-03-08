@@ -7,7 +7,7 @@ import GPUtil
 import supervision as sv
 from ultralytics import YOLO
 import numpy as np
-from numba import jit
+# from numba import jit
 
 import rclpy
 from rclpy.time import Time
