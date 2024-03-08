@@ -58,6 +58,8 @@ class CameraNode(Node):
                 raw_image = mat.get_data()
                 # cv2.imshow(f"ZED Camera", image)
                 converted_image = cv2.cvtColor(raw_image, cv2.COLOR_BGRA2RGB)
+                cv2.imshow(f"ZED Camera", converted_image)
+                
                 self.publish_image(converted_image)
                 key = cv2.waitKey(5)
             else:
@@ -75,7 +77,7 @@ class CameraNode(Node):
         header.frame_id = str(self.index) 
 
         try:
-            image_msg = self.bridge.cv2_to_imgmsg(image, encoding='RGB8')
+            image_msg = self.bridge.cv2_to_imgmsg(image, encoding='rgb8: CV_8UC3')
         except CvBridgeError as e:
             print(e)
         image_msg.header = header
