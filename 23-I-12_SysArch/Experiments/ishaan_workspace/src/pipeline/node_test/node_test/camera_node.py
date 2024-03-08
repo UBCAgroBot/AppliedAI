@@ -1,5 +1,3 @@
-from time import perf_counter
-import sys
 import cv2
 import os
 from pathlib import Path
@@ -10,7 +8,6 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header, String
 from cv_bridge import CvBridge, CvBridgeError
-from example_interfaces.srv import Trigger
 
 class CameraNode(Node):
     def __init__(self):
@@ -18,14 +15,14 @@ class CameraNode(Node):
         self.bridge = CvBridge()
         self.download_path = str(Path.home() / 'Downloads')
         # replace self.camera with parameter
-        self.index, self.camera, self.type = 0, True, "8UC4"
+        self.index, self.camera, self.type = 0, True, "rgb8"
         self.off_publisher = self.create_publisher(String, 'off', 10)
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
 
         if self.camera == True:
             self.camera_publisher()
         else:
-            self.type = "JPG"
+            # self.type = "JPG"
             self.picture_publisher()
     
     def picture_publisher(self):
@@ -56,20 +53,16 @@ class CameraNode(Node):
                 cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
                 self.index += 1
                 raw_image = mat.get_data()
-                # cv2.imshow(f"ZED Camera", image)
-                converted_image = cv2.cvtColor(raw_image, cv2.COLOR_RGBA2RGB)
-                # cv2.imshow(f"ZED Camera", converted_image)
-                
+                converted_image = cv2.cvtColor(raw_image, cv2.COLOR_RGBA2RGB) # consider speedup here?
                 self.publish_image(converted_image)
                 key = cv2.waitKey(5)
             else:
                 key = cv2.waitKey(5)
 
-        # cv2.destroyAllWindows()                
         cam.close()
         print("ZED Camera closed")
-        raise SystemExit
-        # raise KeyboardInterrupt
+        # raise SystemExit
+        raise KeyboardInterrupt
 
     def publish_image(self, image):
         header = Header()
@@ -77,29 +70,31 @@ class CameraNode(Node):
         header.frame_id = str(self.index) 
 
         try:
-            image_msg = self.bridge.cv2_to_imgmsg(image, encoding='rgb8')
+            image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
         except CvBridgeError as e:
             print(e)
+            
         image_msg.header = header
         image_msg.is_bigendian = 0 
         image_msg.step = image_msg.width * 3
 
         self.model_publisher.publish(image_msg)
-        self.get_logger().info(f'Published image frame: {self.index}')
+        self.get_logger().info(f'Published: {self.index}')
 
 def main(args=None):
     rclpy.init(args=args)
     camera_node = CameraNode()
     try:
         rclpy.spin(camera_node)
-    except SystemExit:
-        print("works")
-        camera_node.display_metrics()
-        rclpy.logging.get_logger("Quitting").info('Done')
     except KeyboardInterrupt:
         print("works")
         rclpy.logging.get_logger("Quitting").info('Done')
         camera_node.display_metrics()
+    except SystemExit:
+        print("works")
+        camera_node.display_metrics()
+        rclpy.logging.get_logger("Quitting").info('Done')
+
     camera_node.destroy_node()
     rclpy.shutdown()
 
