@@ -18,7 +18,7 @@ class CameraNode(Node):
         self.bridge = CvBridge()
         self.download_path = str(Path.home() / 'Downloads')
         # replace self.camera with parameter
-        self.index, self.camera, self.type, self.total_data = 0, True, "8UC4", 0
+        self.index, self.camera, self.type = 0, True, "8UC4"
         self.off_publisher = self.create_publisher(String, 'off', 10)
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
 
@@ -48,7 +48,6 @@ class CameraNode(Node):
         
         runtime = sl.RuntimeParameters()
         mat = sl.Mat()
-        self.tic = perf_counter()
         
         key = ''
         while key != 113:  # for 'q' key
@@ -66,7 +65,8 @@ class CameraNode(Node):
         # cv2.destroyAllWindows()                
         cam.close()
         print("ZED Camera closed")
-        self.display_metrics()
+        raise SystemExit
+        # raise KeyboardInterrupt
 
     def publish_image(self, image):
         header = Header()
@@ -74,28 +74,12 @@ class CameraNode(Node):
         header.frame_id = str(self.index) 
 
         image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
-        # try:
-        #     image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
-        # except CvBridgeError as e:
-        #     self.get_logger().info(e)
-        #     print(e)
-            
         image_msg.header = header
         image_msg.is_bigendian = 0 
         image_msg.step = image_msg.width * 3
 
         self.model_publisher.publish(image_msg)
-        self.total_data += sys.getsizeof(image_msg)
         self.get_logger().info(f'Published image frame: {self.index}')
-    
-    def display_metrics(self):
-        msg = String()
-        msg.data = "Done"
-        self.off_publisher.publish(msg)
-        toc = perf_counter()
-        bandwidth = self.total_data / (toc - self.tic)
-        self.get_logger().info(f'Published {len(self.index)} images in {(toc - self.tic):.2f} seconds with average network bandwidth of {round(bandwidth)} bytes per second')
-        raise SystemExit
 
 def main(args=None):
     rclpy.init(args=args)
@@ -103,9 +87,11 @@ def main(args=None):
     try:
         rclpy.spin(camera_node)
     except SystemExit:
+        print("works")
         camera_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
     except KeyboardInterrupt:
+        print("works")
         rclpy.logging.get_logger("Quitting").info('Done')
         camera_node.display_metrics()
     camera_node.destroy_node()
