@@ -43,7 +43,8 @@ class JetsonNode(Node):
         sized_image = cv2.resize(cv_image, (640, 480))
         image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
         # cv2.imread(cv_image, cv2.IMREAD_COLOR)
-        self.detection(image)
+        cv2.imshow("Image window", cv_image)
+        # self.detection(image)
         
         # self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
     
@@ -76,7 +77,7 @@ class JetsonNode(Node):
         
         for result in results:
             boxes = result.boxes  # Boxes object for bounding box outputs
-            result.show()  # display to screen
+            # result.show()  # display to screen
         
         # detections = sv.Detections.from_ultralytics(result)
         # print(len(detections))
