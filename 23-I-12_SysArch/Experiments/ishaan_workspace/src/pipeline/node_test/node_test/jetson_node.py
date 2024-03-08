@@ -19,7 +19,7 @@ from cv_bridge import CvBridge, CvBridgeError
 class JetsonNode(Node):
     def __init__(self):
         super().__init__('jetson_node') #type:ignore
-        print(cv2.__version__) # also find CUDA utilization/verison, NVIDIA SMI?
+        # print(cv2.__version__) # also find CUDA utilization/verison, NVIDIA SMI?
         self.bridge = CvBridge()
         self.model_publisher = self.create_publisher(String, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
@@ -36,9 +36,14 @@ class JetsonNode(Node):
         latency = now - Time.from_msg(msg.header.stamp)
         print(f"Message transmisison latency: {latency.nanoseconds / 1e6} milliseconds")
         # self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds() - msg.header.stamp.nanoseconds()) / 1e6} milliseconds")
+        try:
+            cv_image  = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+        except CvBridgeError as e:
+            print(e)
         
-        cv_image  = self.bridge.imgmsg_to_cv2(msg)
-        cv2.imshow("Image window", cv_image)
+        # cv2.imshow("Image window", cv_image)
+        # cv2.waitKey(0)
+        
         height, width, channels = cv_image.shape
         print(height, width, channels)
         sized_image = cv2.resize(cv_image, (640, 480))
