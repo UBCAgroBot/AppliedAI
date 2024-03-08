@@ -24,7 +24,7 @@ class JetsonNode(Node):
         self.model_publisher = self.create_publisher(String, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
         self.frames, self.cpu, self.mem, self.time, self.latency, self.pid, self.frame_id = 0, 0, 0, 0, 0, 0, 0
-        self.model = YOLO('yolov8s.pt')
+        self.model = YOLO('yolov8n.pt')
         self.tensorrt_init()
     
     def tensorrt_init(self):
@@ -46,7 +46,7 @@ class JetsonNode(Node):
         
         height, width, channels = cv_image.shape
         print(height, width, channels)
-        sized_image = cv2.resize(cv_image, (640, 480))
+        # sized_image = cv2.resize(cv_image, (640, 480))
         # image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
         # cv2.imread(cv_image, cv2.IMREAD_COLOR)
         
