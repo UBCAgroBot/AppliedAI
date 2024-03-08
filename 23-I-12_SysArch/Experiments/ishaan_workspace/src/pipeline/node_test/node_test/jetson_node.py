@@ -40,8 +40,10 @@ class JetsonNode(Node):
         cv_image  = self.bridge.imgmsg_to_cv2(msg)
         height, width, channels = cv_image.shape
         print(height, width, channels)
+        sized_image = cv2.resize(cv_image, (640, 480))
+        image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
         # cv2.imread(cv_image, cv2.IMREAD_COLOR)
-        self.detection(cv_image)
+        self.detection(image)
         
         # self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
     
