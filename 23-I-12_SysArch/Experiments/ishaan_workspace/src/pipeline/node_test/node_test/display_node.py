@@ -15,14 +15,16 @@ from example_interfaces.srv import Trigger
 # tqdm threading later or moving average in display node
 # run display node on my computer -> display metric node
 
+COLORS = sv.ColorPallete().default()
+
 class DisplayNode(Node):
     def __init__(self):
         super().__init__('display_node') #type:ignore
         self.bridge = CvBridge()
         self.box_subscriber = self.create_subscription(String, 'bounding_boxes', self.callback, 10)
-        self.off_subscriber = self.create_subscription(String, 'off', self.display_metrics, 10)
         self.boxes, self.total_mem, self.total_cpu, self.total_exec, self.total_latency, self.frame_id, self.total_frames, self.fps, self.id, self.gpu, self.gpu_mem = None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         self.metrics = [self.total_cpu, self.total_mem, self.total_exec, self.total_latency, self.gpu, self.gpu_mem]
+        self.box_annotator = sv.BoundingBoxAnnotator(color=COLORS)
     
     # use milliseconds instead?
     loop = Timeloop()
@@ -74,3 +76,23 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+
+# cv2 display:
+key = ''
+while key != 113:  # for 'q' key
+    err = cam.grab(runtime)
+    if err == sl.ERROR_CODE.SUCCESS:
+        cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
+        self.index += 1
+        raw_image = mat.get_data()
+        # cv2.imshow(f"ZED Camera", image)
+        converted_image = cv2.cvtColor(raw_image, cv2.COLOR_RGBA2RGB)
+        # cv2.imshow(f"ZED Camera", converted_image)
+        
+        self.publish_image(converted_image)
+        key = cv2.waitKey(5)
+    else:
+        key = cv2.waitKey(5)
+cv2.destroyAllWindows()       
+
+# rolling average over numnber of frames

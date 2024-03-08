@@ -6,7 +6,7 @@ import GPUtil
 
 import supervision as sv
 from ultralytics import YOLO
-import numpy as np
+# import numpy as np
 # from numba import jit
 
 import rclpy
@@ -19,7 +19,6 @@ from cv_bridge import CvBridge, CvBridgeError
 class JetsonNode(Node):
     def __init__(self):
         super().__init__('jetson_node') #type:ignore
-        # print(cv2.__version__) # also find CUDA utilization/verison, NVIDIA SMI?
         self.bridge = CvBridge()
         self.model_publisher = self.create_publisher(String, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
@@ -34,32 +33,27 @@ class JetsonNode(Node):
         now = self.get_clock().now()
         self.get_logger().info(f"Received: {msg.header.frame_id}")
         latency = now - Time.from_msg(msg.header.stamp)
-        print(f"Message transmisison latency: {latency.nanoseconds / 1e6} milliseconds")
-        # self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds() - msg.header.stamp.nanoseconds()) / 1e6} milliseconds")
+        print(f"Latency: {latency.nanoseconds / 1e6} milliseconds")
+        
         try:
-            cv_image  = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
+            image  = self.bridge.imgmsg_to_cv2(msg, desired_encoding='rgb8')
         except CvBridgeError as e:
             print(e)
         
-        # cv2.imshow("Image window", cv_image)
-        # cv2.waitKey(0)
-        
-        height, width, channels = cv_image.shape
+        height, width, channels = image.shape
         print(height, width, channels)
-        # sized_image = cv2.resize(cv_image, (640, 480))
-        # image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
-        # cv2.imread(cv_image, cv2.IMREAD_COLOR)
+        # # sized_image = cv2.resize(cv_image, (640, 480))
         
-        # self.detection(image)
+        self.detection(image)
         
-        # self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
+        self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
     
     def preprocessing(self, data):
         pass
 
     def detection(self, data):
-        pid = os.getpid()
-        print(pid)
+        # pid = os.getpid()
+        # print(pid)
 
         tic = time.perf_counter_ns()
         # pre_mem = psutil.Process(pid).memory_percent()
@@ -80,13 +74,14 @@ class JetsonNode(Node):
         # self.get_logger().info(f"GPU VRAM usage: {self.gpu_mem}%")
         # self.get_logger().info(f"Memory usage: {self.mem}%")
         # self.get_logger().info(f"Execution time: {self.time} milliseconds")
+        detections = sv.Detections.from_ultralytics(results)
         
         for result in results:
-            boxes = result.boxes  # Boxes object for bounding box outputs
-            # result.show()  # display to screen
+            # boxes = result.boxes  # Boxes object for bounding box outputs
+            result.show()  # display to screen
         
-        # detections = sv.Detections.from_ultralytics(result)
-        # print(len(detections))
+        detections = sv.Detections.from_ultralytics(result)
+        print(len(detections))
         # self.publish_result(detections)
     
     def publish_result(self, bounding_boxes):
