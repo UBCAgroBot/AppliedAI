@@ -55,9 +55,10 @@ class CameraNode(Node):
             if err == sl.ERROR_CODE.SUCCESS:
                 cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
                 self.index += 1
-                image = mat.get_data()
+                raw_image = mat.get_data()
                 # cv2.imshow(f"ZED Camera", image)
-                self.publish_image(image)
+                converted_image = cv2.cvtColor(raw_image, cv2.COLOR_BGRA2RGB)
+                self.publish_image(converted_image)
                 key = cv2.waitKey(5)
             else:
                 key = cv2.waitKey(5)
@@ -73,7 +74,10 @@ class CameraNode(Node):
         header.stamp = self.get_clock().now().to_msg()
         header.frame_id = str(self.index) 
 
-        image_msg = self.bridge.cv2_to_imgmsg(image, encoding=self.type)
+        try:
+            image_msg = self.bridge.cv2_to_imgmsg(image, encoding='RGB8')
+        except CvBridgeError as e:
+            print(e)
         image_msg.header = header
         image_msg.is_bigendian = 0 
         image_msg.step = image_msg.width * 3

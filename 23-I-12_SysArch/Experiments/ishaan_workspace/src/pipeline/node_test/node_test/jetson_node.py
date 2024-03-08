@@ -42,7 +42,7 @@ class JetsonNode(Node):
         height, width, channels = cv_image.shape
         print(height, width, channels)
         sized_image = cv2.resize(cv_image, (640, 480))
-        image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
+        # image = cv2.cvtColor(sized_image, cv2.COLOR_BGR2RGB)
         # cv2.imread(cv_image, cv2.IMREAD_COLOR)
         
         # self.detection(image)
