@@ -29,7 +29,7 @@ class JetsonNode(Node):
         pass
     
     def callback(self, msg):
-        self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds - msg.header.stamp.nanoseconds) / 1e6} milliseconds")
+        self.get_logger().info(f"Latency of {msg.header.frame_id} is {(self.get_clock().now().nanoseconds() - msg.header.stamp.nanoseconds()) / 1e6} milliseconds")
         # self.get_logger().info(f"Received: {msg.header.frame_id}")
         # now = self.get_clock().now()
         # latency = now - Time.from_msg(msg.header.stamp)
