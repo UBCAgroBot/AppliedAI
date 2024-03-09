@@ -12,7 +12,8 @@ counter = 1
 imgid = 1
 jsimgs = {"images": [], "annotations": [], "categories": [{"id": 1, "name": "Grape Bunch"}]}
 for i in masks:
-	imdict = {"file_name": i.split("/")[-1], "height": 500, "width": 500, "id": counter}
+	filename = i.split("/")[-1][:-3]
+	imdict = {"file_name": f'{filename}jpg, "height": 500, "width": 500, "id": counter}
 	counter += 1
 	jsimgs['images'].append(imdict)
 	
