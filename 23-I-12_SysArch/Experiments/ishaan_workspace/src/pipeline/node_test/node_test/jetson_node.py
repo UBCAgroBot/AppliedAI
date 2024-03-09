@@ -4,9 +4,6 @@ import cv2
 import psutil
 import GPUtil
 
-import supervision as sv
-from ultralytics import YOLO
-# import numpy as np
 # from numba import jit
 
 import rclpy
@@ -23,7 +20,7 @@ class JetsonNode(Node):
         self.model_publisher = self.create_publisher(String, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
         self.frames, self.cpu, self.mem, self.time, self.latency, self.pid, self.frame_id = 0, 0, 0, 0, 0, 0, 0
-        self.model = YOLO('yolov8n.pt')
+        # self.model = 
         self.tensorrt_init()
     
     def tensorrt_init(self):
@@ -44,9 +41,9 @@ class JetsonNode(Node):
         print(height, width, channels)
         # # sized_image = cv2.resize(cv_image, (640, 480))
         
-        self.detection(image)
-        
         self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
+        
+        
     
     def preprocessing(self, data):
         pass
@@ -58,7 +55,7 @@ class JetsonNode(Node):
         tic = time.perf_counter_ns()
         # pre_mem = psutil.Process(pid).memory_percent()
         # pre_cpu = psutil.Process(pid).cpu_percent(interval=None)
-        results = self.model(data, stream=True)
+        # self.model.predict()
         # post_cpu = psutil.Process(pid).cpu_percent(interval=None)
         # post_mem = psutil.Process(self.pid).memory_percent()
         toc = time.perf_counter_ns()
@@ -74,14 +71,7 @@ class JetsonNode(Node):
         # self.get_logger().info(f"GPU VRAM usage: {self.gpu_mem}%")
         # self.get_logger().info(f"Memory usage: {self.mem}%")
         # self.get_logger().info(f"Execution time: {self.time} milliseconds")
-        detections = sv.Detections.from_ultralytics(results)
         
-        for result in results:
-            # boxes = result.boxes  # Boxes object for bounding box outputs
-            result.show()  # display to screen
-        
-        detections = sv.Detections.from_ultralytics(result)
-        print(len(detections))
         # self.publish_result(detections)
     
     def publish_result(self, bounding_boxes):
@@ -102,11 +92,11 @@ def main(args=None):
     try:
         rclpy.spin(jetson_node)
     except KeyboardInterrupt:
-        print("josy...")
+        print("qq...")
         jetson_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
     except SystemExit:   
-        print("josy...")
+        print("qqq...")
         jetson_node.display_metrics()
         rclpy.logging.get_logger("Quitting").info('Done')
 
