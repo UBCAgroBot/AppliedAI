@@ -7,6 +7,9 @@
   <maintainer email="ishaandatta737@gmail.com">ishaan_datta</maintainer>
   <license>Apache License 2.0</license>
 
+  <build_depend>message_generation</build_depend>
+  
+  <exec_depend>messsage_runtime</exec_depend>
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>sensor_msgs</exec_depend>

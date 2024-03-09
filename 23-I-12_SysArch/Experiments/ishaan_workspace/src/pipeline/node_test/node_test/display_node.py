@@ -25,6 +25,18 @@ class DisplayNode(Node):
         self.boxes, self.total_mem, self.total_cpu, self.total_exec, self.total_latency, self.frame_id, self.total_frames, self.fps, self.id, self.gpu, self.gpu_mem = None, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         self.metrics = [self.total_cpu, self.total_mem, self.total_exec, self.total_latency, self.gpu, self.gpu_mem]
         self.box_annotator = sv.BoundingBoxAnnotator(color=COLORS)
+        
+        # Create a subscriber
+    self.subscriber = self.create_subscription(
+        BoundingBox,  # The message type
+        'bounding_boxes',  # The topic name
+        self.bounding_box_callback,  # The callback function
+        10  # The queue size
+    )
+
+def bounding_box_callback(self, msg):
+    # This function is called whenever a new message is received
+    print(f"Received bounding box: {msg.box}, score: {msg.score}, class: {msg.class}")
     
     # use milliseconds instead?
     loop = Timeloop()
@@ -96,3 +108,20 @@ while key != 113:  # for 'q' key
 cv2.destroyAllWindows()       
 
 # rolling average over numnber of frames
+            # bounding_box.xmin = box[0]
+            # bounding_box.ymin = box[1]
+            # bounding_box.xmax = box[2]
+            # bounding_box.ymax = box[3]
+            # bounding_box.probability = score
+            # bounding_box.Class = class_
+        # Draw the bounding boxes on the image
+
+from cv2 import rectangle, putText, FONT_HERSHEY_SIMPLEX
+for box, score, class_ in zip(boxes, scores, classes):
+    # Draw the bounding box
+    rectangle(image_with_boxes, (box[0], box[1]), (box[2], box[3]), (0, 255, 0), 2)
+
+    # Draw the class and score
+    putText(image_with_boxes, f"{class_}: {score}", (box[0], box[1] - 5), FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+    # ...
