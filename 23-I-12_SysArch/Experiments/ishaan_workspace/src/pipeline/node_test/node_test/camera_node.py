@@ -16,7 +16,6 @@ class CameraNode(Node):
         self.download_path = str(Path.home() / 'Downloads')
         # replace self.camera with parameter
         self.index, self.camera, self.type = 0, True, "rgb8"
-        self.off_publisher = self.create_publisher(String, 'off', 10)
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
 
         if self.camera == True:
