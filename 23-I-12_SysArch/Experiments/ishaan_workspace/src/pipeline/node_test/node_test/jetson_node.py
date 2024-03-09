@@ -93,7 +93,7 @@ class JetsonNode(Node):
         self.get_logger().info(msg.data)
     
     def display_metrics(self):
-        self.get_logger().info(f'Frame loss: {((self.frames/self.last_frame_id)*100):0.1f}')
+        self.get_logger().info(f'Frame loss: {((self.frames/self.frame_id)*100):0.1f}')
         raise SystemExit
 
 def main(args=None):
