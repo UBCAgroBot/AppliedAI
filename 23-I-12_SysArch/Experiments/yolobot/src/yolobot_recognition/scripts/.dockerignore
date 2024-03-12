@@ -1,70 +1,28 @@
-# Ignore specific directories
-23-I-12_SysArch/Experiments/ishaan_workspace/build/
-23-I-12_SysArch/Experiments/ishaan_workspace/install/
-23-I-12_SysArch/Experiments/ishaan_workspace/log/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/examples/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/build/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/install/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/log/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/include/
-
-.vscode
-
-# Don't ignore src/pipeline
-!23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/jetson_node.cpython-38.pyc
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/camera_node.cpython-38.pyc
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/yolov5l6.pt
-
-# Yolobot specific:
-*.jpg
-*.mtl
-*.config
-*.sdf
-*.material
-*.dae
-*.obj
-*.jpeg
-*.png
-*.bmp
-*.tif
-*.tiff
-*.heic
-*.JPG
-*.JPEG
-*.PNG
-*.BMP
-*.TIF
-*.TIFF
-*.HEIC
-*.mp4
-*.mov
-*.MOV
-*.avi
-*.data
-*.json
-*.cfg
-*.pt
+# Repo-specific DockerIgnore -------------------------------------------------------------------------------------------
+#.git
+.cache
+.idea
+runs
+output
+coco
 storage.googleapis.com
 
-# Datasets -------------------------------------------------------------------------------------------------------------
-coco/
-coco128/
-VOC/
-
-# MATLAB GitIgnore -----------------------------------------------------------------------------------------------------
-*.m~
-*.mat
-!targets*.mat
+data/samples/*
+**/results*.txt
+*.jpg
 
 # Neural Network weights -----------------------------------------------------------------------------------------------
-*.weights
-*.pt
-*.onnx
-*.mlmodel
-*.torchscript
-darknet53.conv.74
-yolov3-tiny.conv.15
+**/*.pt
+**/*.pth
+**/*.onnx
+**/*.mlmodel
+**/*.torchscript
+**/*.torchscript.pt
+
+
+# Below Copied From .gitignore -----------------------------------------------------------------------------------------
+# Below Copied From .gitignore -----------------------------------------------------------------------------------------
+
 
 # GitHub Python GitIgnore ----------------------------------------------------------------------------------------------
 # Byte-compiled / optimized / DLL files
@@ -94,7 +52,6 @@ wheels/
 wandb/
 .installed.cfg
 *.egg
-
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

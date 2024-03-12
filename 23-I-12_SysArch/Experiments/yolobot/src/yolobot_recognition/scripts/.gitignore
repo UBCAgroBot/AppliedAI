@@ -1,29 +1,5 @@
-# Ignore specific directories
-23-I-12_SysArch/Experiments/ishaan_workspace/build/
-23-I-12_SysArch/Experiments/ishaan_workspace/install/
-23-I-12_SysArch/Experiments/ishaan_workspace/log/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/examples/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/build/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/install/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/log/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/include/
-
-.vscode
-
-# Don't ignore src/pipeline
-!23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/jetson_node.cpython-38.pyc
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/camera_node.cpython-38.pyc
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/yolov5l6.pt
-
-# Yolobot specific:
+# Repo-specific GitIgnore ----------------------------------------------------------------------------------------------
 *.jpg
-*.mtl
-*.config
-*.sdf
-*.material
-*.dae
-*.obj
 *.jpeg
 *.png
 *.bmp
@@ -44,8 +20,17 @@
 *.data
 *.json
 *.cfg
-*.pt
+!cfg/yolov3*.cfg
+
 storage.googleapis.com
+runs/*
+data/*
+!data/hyps/*
+!data/images/zidane.jpg
+!data/images/bus.jpg
+!data/*.sh
+
+results*.txt
 
 # Datasets -------------------------------------------------------------------------------------------------------------
 coco/
