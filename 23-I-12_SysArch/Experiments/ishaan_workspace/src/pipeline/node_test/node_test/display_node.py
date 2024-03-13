@@ -12,7 +12,19 @@ from tqdm import tqdm
 from tabulate import tabulate
 from timeloop import Timeloop
 from datetime import timedelta
-from time import sleep
+
+class_labels = [
+    'person', 'bicycle', 'car', 'motorbike', 'aeroplane', 'bus', 'train', 'truck', 'boat', 
+    'traffic light', 'fire hydrant', 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 
+    'dog', 'horse', 'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack', 
+    'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard', 'sports ball', 
+    'kite', 'baseball bat', 'baseball glove', 'skateboard', 'surfboard', 'tennis racket', 
+    'bottle', 'wine glass', 'cup', 'fork', 'knife', 'spoon', 'bowl', 'banana', 'apple', 
+    'sandwich', 'orange', 'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair', 
+    'sofa', 'pottedplant', 'bed', 'diningtable', 'toilet', 'tvmonitor', 'laptop', 'mouse', 
+    'remote', 'keyboard', 'cell phone', 'microwave', 'oven', 'toaster', 'sink', 'refrigerator', 
+    'book', 'clock', 'vase', 'scissors', 'teddy bear', 'hair drier', 'toothbrush'
+]
 
 class Image_subscriber(Node):
     def __init__(self):
@@ -66,6 +78,7 @@ class Yolo_subscriber(Node):
             # Draw the bounding box
             top, left, bottom, right = box[0], box[1], box[2], box[3] #xmin, ymin, xmax, ymax
             cv2.rectangle(img, (top, left), (bottom, right), (255, 255, 0))
+            class_ = class_labels[class_]
 
             # Draw the class and score
             cv2.putText(img, f"{class_}: {score}", (top, left - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2, cv2.LINE_AA)
@@ -126,3 +139,4 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+

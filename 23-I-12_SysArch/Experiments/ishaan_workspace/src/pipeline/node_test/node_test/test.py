@@ -26,3 +26,24 @@ def get_threads_cpu_percent(p, interval=0.1):
 # percent_of_cpu_usage_utilized_by_thread_a = total_cpu_percent*(total_time_thread_a_used_cpu_over_time_interval/total_time_process_used_cpu_over_interval)
 
 # check .dockerignore
+
+try:
+    self.model = torch.jit.load("trt_model.ts").cuda()
+except Exception as e:
+    try:
+        model = torch.load('yolov5s.pt', model_math='fp32').eval().to("cuda") # replace with ONNX
+        self.model = torch_tensorrt.compile(model, inputs=[torch_tensortt([1, 3, 1280, 1280])], enabled_precisions={'torch.half'}, debug=True)
+        self.save = False
+    except Exception as e:
+        self.get_logger().info(f"Error: {e}")
+        raise SystemExit
+finally:
+    self.get_logger().info("Model loaded successfully")
+    
+            normalized_image = resized_image / 255.0  # Normalize pixel values to [0, 1]
+        input_image = torch.from_numpy(normalized_image).permute(2, 0, 1).float()  # Convert to torch tensor and rearrange dimensions
+                output = input_image.unsqueeze(0)  # Add a batch dimension
+                
+                
+                        img = img.transpose((2, 0, 1)).astype(np.float32)
+        img = np.expand_dims(img, axis=0)

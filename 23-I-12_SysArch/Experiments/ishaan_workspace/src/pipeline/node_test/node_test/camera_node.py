@@ -2,6 +2,7 @@ import cv2
 import os
 from pathlib import Path
 import pyzed.sl as sl
+import psutil
 
 import rclpy
 from rclpy.node import Node
@@ -47,6 +48,10 @@ class CameraNode(Node):
         runtime = sl.RuntimeParameters()
         mat = sl.Mat()
         
+        # Convert the numpy array to a CUDA GPU Mat
+        image_gpu = cv2.cuda_GpuMat()
+        
+        pre_mem = psutil.Process().memory_percent()
         key = ''
         while key != 113:  # for 'q' key
             err = cam.grab(runtime)
@@ -54,14 +59,30 @@ class CameraNode(Node):
                 cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
                 self.index += 1
                 raw_image = mat.get_data()
-                converted_image = cv2.cvtColor(raw_image, cv2.COLOR_RGBA2RGB) # consider speedup here?
+                
+                # Convert the numpy array to a CUDA GPU Mat
+                # image_gpu = cv2.cuda_GpuMat()
+                image_gpu.upload(raw_image)
+                
+                # Convert the image to RGB using CUDA
+                converted_image = cv2.cuda.cvtColor(raw_image, cv2.COLOR_RGBA2RGB)
+                
+                # Download the grayscale image to a numpy array
+                image = converted_image.download()
+                
                 self.publish_image(converted_image)
+                post_mem = psutil.Process().memory_percent()
+                print(f"Memory usage: {(post_mem - pre_mem) * 100:.2f}%")
                 key = cv2.waitKey(5)
             else:
                 key = cv2.waitKey(5)
-
+                
+        post_mem = psutil.Process().memory_percent()
+        print(f"FINAL Memory usage: {(post_mem - pre_mem) * 100:.2f}%")
+        
         cam.close()
         print("ZED Camera closed")
+        
         # raise SystemExit
         raise KeyboardInterrupt
 
