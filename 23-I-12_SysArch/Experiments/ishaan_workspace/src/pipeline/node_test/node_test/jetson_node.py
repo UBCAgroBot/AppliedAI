@@ -4,29 +4,28 @@ import psutil
 import GPUtil
 
 import cv2
-import torch
-import torch_tensortt
-
-from torchvision.ops import nms
-import torch.onnx
 
 # from numba import jit
-from Processor_Batch import Processor
-from Visualizer import Visualizer
+# argparse for choosing model
 
 import rclpy
 from rclpy.time import Time
 from rclpy.node import Node
 from std_msgs.msg import Header, String
 from sensor_msgs.msg import Image
+from BoundingBox.msg import BoundingBox
 from cv_bridge import CvBridge, CvBridgeError
 
 class JetsonNode(Node):
     def __init__(self):
         super().__init__('jetson_node') #type:ignore
         self.bridge = CvBridge()
+        
+        self.inference = BoundingBox()
+        
         self.model_publisher = self.create_publisher(BoundingBox, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
+        self.camera_subscriber
         self.frames, self.cpu, self.mem, self.time, self.latency, self.pid, self.frame_id, self.save = 0, 0, 0, 0, 0, 0, 0, True
         self.tensorrt_init()
     
@@ -35,7 +34,7 @@ class JetsonNode(Node):
             self.model = torch.jit.load("trt_model.ts").cuda()
         except Exception as e:
             try:
-                model = torch.load('yolov5s.pt', model_math='fp32').eval().to("cuda") # cuda?
+                model = torch.load('yolov5s.pt', model_math='fp32').eval().to("cuda") # replace with ONNX
                 self.model = torch_tensorrt.compile(model, inputs=[torch_tensortt([1, 3, 1280, 1280])], enabled_precisions={'torch.half'}, debug=True)
                 self.save = False
             except Exception as e:
@@ -94,10 +93,25 @@ class JetsonNode(Node):
         # self.get_logger().info(f"GPU VRAM usage: {self.gpu_mem}%")
         # self.get_logger().info(f"Memory usage: {self.mem}%")
         # self.get_logger().info(f"Execution time: {self.time} milliseconds")
-        
+        # annotated_frame = results[0].plot()
         self.publish_result(detections)
+        self.detections.clear()
     
     def postprocessing(self, output):
+        
+        # self.inference_result = InferenceResult()
+        # b = box.xyxy[0].to('cpu').detach().numpy().copy()  # get box coordinates in (top, left, bottom, right) format
+        # c = box.cls
+        for r in results:
+            boxes = r.boxes
+            for box in boxes:
+                self.inference.box = box
+                self.inference.score = r.scores
+                self.inference.class_num = r.pred
+                self.model_publisher.publish(self.inference)
+
+        # self.yolov8_inference.yolov8_inference.append(self.inference_result)
+        
         # Apply non-maximum suppression
         boxes = output[..., :4]  # Bounding box coordinates
         scores = output[..., 4]  # Objectness scores

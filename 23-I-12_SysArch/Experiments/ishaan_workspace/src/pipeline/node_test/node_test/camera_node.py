@@ -34,6 +34,8 @@ class CameraNode(Node):
     def camera_publisher(self):
         init = sl.InitParameters()
         cam = sl.Camera()
+        init.camera_resolution = sl.RESOLUTION.HD1080
+        init.camera_fps = 30
 
         if not cam.is_opened():
             print("Opening ZED Camera ")
