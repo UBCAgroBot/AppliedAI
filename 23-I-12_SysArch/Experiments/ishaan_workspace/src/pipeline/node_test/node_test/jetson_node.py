@@ -1,8 +1,6 @@
 import time
 import os
 import psutil
-import GPUtil
-
 import cv2
 
 # from numba import jit

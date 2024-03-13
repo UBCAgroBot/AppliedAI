@@ -10,16 +10,6 @@ def get_threads_cpu_percent(p, interval=0.1):
     total_time = sum(p.cpu_times())
     return [('%s %s %s' % (total_percent * ((t.system_time + t.user_time)/total_time), t.id, psutil.Process(t.id).name())) for t in p.threads()]
 
-# Get 1 available GPU, ordered by GPU load ascending
-# print('First available weighted by GPU load ascending: '),
-# print(GPU.getAvailable(order='load', limit=1))
-
-gpu = GPUtil.getGPUs()[0] # firstGPU = GPU.getFirstAvailable()
-
-# Get 1 available GPU, ordered by ID in descending order
-# print('Last available: '),
-# print(GPU.getAvailable(order='last', limit=1))  
-
 # # grab the new total amount of time the process has used the cpu
 # final_total_time = sum(proc.cpu_times())
 
