@@ -59,7 +59,7 @@ class JetsonNode(Node):
             config = builder.create_builder_config()
 
             # Build the TensorRT engine
-            self.model = builder.build_cuda_engine(network, config)
+            self.model = builder.build_engine(network, config)
             
         except Exception as e:
             self.get_logger().info(f"Error: {e}")
