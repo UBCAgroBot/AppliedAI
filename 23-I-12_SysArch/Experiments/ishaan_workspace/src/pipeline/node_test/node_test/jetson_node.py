@@ -48,12 +48,21 @@ class JetsonNode(Node):
             builder = trt.Builder(TRT_LOGGER)
             
             # Create a TensorRT network
-            network = builder.create_network()
+            network = builder.create_network(flags=trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)
             
             # Load the ONNX model into the network
             with trt.OnnxParser(network, TRT_LOGGER) as parser:
                 with open('yolov8x.onnx', 'rb') as model:
                     parser.parse(model.read())
+            
+            # Check the number of output layers in the network
+            num_outputs = network.num_outputs
+            self.get_logger().info(f"Number of network outputs: {num_outputs}")
+
+            # If the network has no output layers, manually set the last layer as the output
+            if num_outputs == 0:
+                last_layer = network.get_layer(network.num_layers - 1)
+                network.mark_output(last_layer.get_output(0))
 
             # Create a builder config
             config = builder.create_builder_config()
