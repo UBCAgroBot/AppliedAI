@@ -35,15 +35,15 @@ class JetsonNode(Node):
     
     def tensorrt_init(self):
         try:
-            os.chdir(os.path.dirname(os.path.realpath(__file__)))
-            print(os.getcwd())
+            path = "/home/user/AppliedAI/23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test"
+            # print(path)
+            os.chdir(path)
+            # print(os.getcwd())
             # Create a TensorRT logger
             TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
 
             # Create a TensorRT builder
             builder = trt.Builder(TRT_LOGGER)
-
-            os.chdir()
             
             # Load the ONNX model
             with open('yolov8x.onnx', 'rb') as f:
