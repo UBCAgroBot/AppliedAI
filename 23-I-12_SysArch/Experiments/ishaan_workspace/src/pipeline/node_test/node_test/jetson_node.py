@@ -26,7 +26,7 @@ class JetsonNode(Node):
         # self.inference = BoundingBox()
         self.image = cv2.cuda_GpuMat()
         
-        self.model_publisher = self.create_publisher(BoundingBox, 'bounding_boxes', 10)
+        # self.model_publisher = self.create_publisher(BoundingBox, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
         self.camera_subscriber
         self.frames, self.cpu, self.mem, self.time, self.latency, self.pid, self.frame_id, self.save = 0, 0, 0, 0, 0, 0, 0, True
@@ -41,8 +41,10 @@ class JetsonNode(Node):
             # Create a TensorRT builder
             builder = trt.Builder(TRT_LOGGER)
 
+            os.chdir()
+            
             # Load the ONNX model
-            with open('yolov8.onnx', 'rb') as f:
+            with open('yolov8x.onnx', 'rb') as f:
                 model = f.read()
 
             # Parse the ONNX model
