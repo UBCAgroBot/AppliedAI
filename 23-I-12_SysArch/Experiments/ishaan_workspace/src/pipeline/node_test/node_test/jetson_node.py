@@ -52,7 +52,7 @@ class JetsonNode(Node):
             
             # Load the ONNX model into the network
             with trt.OnnxParser(network, TRT_LOGGER) as parser:
-                with open('yolov8.onnx', 'rb') as model:
+                with open('yolov8x.onnx', 'rb') as model:
                     parser.parse(model.read())
 
             # Create a builder config
