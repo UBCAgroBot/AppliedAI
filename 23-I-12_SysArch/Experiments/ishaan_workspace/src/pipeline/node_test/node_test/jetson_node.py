@@ -16,14 +16,14 @@ from rclpy.time import Time
 from rclpy.node import Node
 from std_msgs.msg import Header, String
 from sensor_msgs.msg import Image
-from msg import BoundingBox
+# from msg import BoundingBox
 from cv_bridge import CvBridge, CvBridgeError
 
 class JetsonNode(Node):
     def __init__(self):
         super().__init__('jetson_node') #type:ignore
         self.bridge = CvBridge()
-        self.inference = BoundingBox()
+        # self.inference = BoundingBox()
         self.image = cv2.cuda_GpuMat()
         
         self.model_publisher = self.create_publisher(BoundingBox, 'bounding_boxes', 10)
@@ -143,7 +143,7 @@ class JetsonNode(Node):
         
         # keep = nms(boxes, scores, iou_threshold=0.5)  # Indices of boxes to keep after non-maximum suppression
         # self.publish_result(boxes[keep], scores[keep], classes[keep])
-        self.publish_result(boxes, scores, classes)
+        # self.publish_result(boxes, scores, classes)
         
         toc = time.perf_counter_ns()
         self.postprocessing_time = (toc-tic)/1e6
