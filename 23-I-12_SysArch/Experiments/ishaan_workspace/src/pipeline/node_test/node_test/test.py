@@ -47,17 +47,3 @@
                 
 #                         img = img.transpose((2, 0, 1)).astype(np.float32)
 #         img = np.expand_dims(img, axis=0)
-
-import torch
-import torchvision
-
-# Load the PyTorch model
-model = torch.load('yolov8x.pt')
-model.eval()
-
-# Create a dummy input that matches the input format of the model
-# Assuming the model takes a 1x3x224x224 input, but you should adjust this to match your model
-dummy_input = torch.randn(1, 3, 640, 640)
-
-# Export the model to an ONNX file
-torch.onnx.export(model, dummy_input, "yolov8x.onnx")

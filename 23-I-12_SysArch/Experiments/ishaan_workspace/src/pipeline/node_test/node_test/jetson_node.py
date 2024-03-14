@@ -80,7 +80,7 @@ class JetsonNode(Node):
         # Convert the numpy array to a CUDA GPU Mat
         image_gpu.upload(image)
         # Resize and normalize the image
-        image_gpu = cv2.cuda.resize(image_gpu, (640, 640)) 
+        image_gpu = cv2.cuda.resize(image_gpu, (1920, 1088)) 
         # Convert the image to float32
         image_gpu = image_gpu.transpose((2, 0, 1)).astype(np.float32)
         image_gpu = np.expand_dims(image_gpu, axis=0)
