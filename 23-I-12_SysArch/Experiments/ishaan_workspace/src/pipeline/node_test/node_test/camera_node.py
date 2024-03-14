@@ -48,9 +48,6 @@ class CameraNode(Node):
         runtime = sl.RuntimeParameters()
         mat = sl.Mat()
         
-        # Convert the numpy array to a CUDA GPU Mat
-        image_gpu = cv2.cuda_GpuMat()
-        
         pre_mem = psutil.Process().memory_percent()
         key = ''
         while key != 113:  # for 'q' key
@@ -58,17 +55,11 @@ class CameraNode(Node):
             if err == sl.ERROR_CODE.SUCCESS:
                 cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
                 self.index += 1
-                raw_image = mat.get_data()
-                
-                # Convert the numpy array to a CUDA GPU Mat
-                image_gpu.upload(raw_image)
-                
+                image = mat.get_data()
                 # Convert the image to RGB using CUDA
-                image_gpu = cv2.cuda.cvtColor(image_gpu, cv2.COLOR_RGBA2RGB)
-                
-                # Download the grayscale image to a numpy array
-                image = image_gpu.download()
-                # cv2.imshow("zed", image)
+                image = cv2.cvtColor(image, cv2.COLOR_RGBA2RGB)
+
+                cv2.imshow("zed", image)
                 self.publish_image(image)
                 post_mem = psutil.Process().memory_percent()
                 print(f"Memory usage: {(post_mem - pre_mem) * 100:.2f}%")

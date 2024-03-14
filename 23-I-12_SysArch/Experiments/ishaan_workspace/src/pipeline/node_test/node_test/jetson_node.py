@@ -80,8 +80,12 @@ class JetsonNode(Node):
         tic = time.perf_counter_ns()
         
         image_gpu = self.image
-        # image_gpu = cv2.cuda_GpuMat() # was put in initialization instead
+        
+                        # Download the grayscale image to a numpy array
+                image = image_gpu.download()
         image_gpu.upload(image)
+                        # Convert the numpy array to a CUDA GPU Mat
+                image_gpu.upload(raw_image)
         
         # Resize and normalize the image
         image_gpu = cv2.cuda.resize(image_gpu, (1280, 1280)) 
