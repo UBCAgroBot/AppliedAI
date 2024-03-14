@@ -24,12 +24,13 @@ class JetsonNode(Node):
         super().__init__('jetson_node') #type:ignore
         self.bridge = CvBridge()
         self.inference = BoundingBox()
+        self.image = cv2.cuda_GpuMat()
         
         self.model_publisher = self.create_publisher(BoundingBox, 'bounding_boxes', 10)
         self.camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
         self.camera_subscriber
         self.frames, self.cpu, self.mem, self.time, self.latency, self.pid, self.frame_id, self.save = 0, 0, 0, 0, 0, 0, 0, True
-        self.image, self.preprocessing_time, self.inferencing_time, self.postprocessing_time = cv2.cuda_GpuMat(), 0, 0, 0
+        self.preprocessing_time, self.inferencing_time, self.postprocessing_time = 0, 0, 0
         self.tensorrt_init()
     
     def tensorrt_init(self):
@@ -69,34 +70,22 @@ class JetsonNode(Node):
         except CvBridgeError as e:
             print(e)
         
-        # height, width, channels = image.shape
-        # print(height, width, channels)
-        
         self.latency, self.frame_id, self.frames = latency.nanoseconds / 1e6, msg.header.frame_id, self.frames + 1
         self.preprocessing(image)
-        
     
     def preprocessing(self, image):
         tic = time.perf_counter_ns()
         
         image_gpu = self.image
-        
-                        # Download the grayscale image to a numpy array
-                image = image_gpu.download()
+        # Convert the numpy array to a CUDA GPU Mat
         image_gpu.upload(image)
-                        # Convert the numpy array to a CUDA GPU Mat
-                image_gpu.upload(raw_image)
-        
         # Resize and normalize the image
-        image_gpu = cv2.cuda.resize(image_gpu, (1280, 1280)) 
-        
+        image_gpu = cv2.cuda.resize(image_gpu, (640, 640)) 
         # Convert the image to float32
         image_gpu = image_gpu.transpose((2, 0, 1)).astype(np.float32)
         image_gpu = np.expand_dims(image_gpu, axis=0)
-        
         # Transpose the image
         image_gpu = cv2.cuda.transpose(image_gpu)
-        
         # Add a new dimension to the image
         image_gpu = cv2.cuda_GpuMat((1,) + image_gpu.size(), image_gpu.type())
         cv2.cuda.copyMakeBorder(image_gpu, 0, 1, 0, 0, cv2.BORDER_CONSTANT, image_gpu)
