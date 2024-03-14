@@ -35,6 +35,8 @@ class JetsonNode(Node):
     
     def tensorrt_init(self):
         try:
+            os.chdir(os.path.dirname(os.path.realpath(__file__)))
+            print(os.getcwd())
             # Create a TensorRT logger
             TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
 
