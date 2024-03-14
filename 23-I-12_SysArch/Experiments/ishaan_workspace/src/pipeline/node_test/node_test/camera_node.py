@@ -62,16 +62,16 @@ class CameraNode(Node):
                 raw_image = mat.get_data()
                 
                 # Convert the numpy array to a CUDA GPU Mat
-                image_gpu = cv2.cuda_GpuMat()
+                # image_gpu = cv2.cuda_GpuMat()
                 image_gpu.upload(raw_image)
                 
                 # Convert the image to RGB using CUDA
-                converted_image = cv2.cuda.cvtColor(raw_image, cv2.COLOR_RGBA2RGB)
+                image_gpu = cv2.cuda.cvtColor(image_gpu, cv2.COLOR_RGBA2RGB)
                 
                 # Download the grayscale image to a numpy array
-                image = converted_image.download()
+                image = image_gpu.download()
                 
-                self.publish_image(converted_image)
+                self.publish_image(image)
                 post_mem = psutil.Process().memory_percent()
                 print(f"Memory usage: {(post_mem - pre_mem) * 100:.2f}%")
                 key = cv2.waitKey(5)
