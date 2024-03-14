@@ -68,17 +68,13 @@ class CameraNode(Node):
                 
                 # Download the grayscale image to a numpy array
                 image = image_gpu.download()
-                
+                # cv2.imshow("zed", image)
                 self.publish_image(image)
                 post_mem = psutil.Process().memory_percent()
                 print(f"Memory usage: {(post_mem - pre_mem) * 100:.2f}%")
                 key = cv2.waitKey(5)
             else:
                 key = cv2.waitKey(5)
-                
-        post_mem = psutil.Process().memory_percent()
-        print(f"FINAL Memory usage: {(post_mem - pre_mem) * 100:.2f}%")
-        
         cam.close()
         print("ZED Camera closed")
         

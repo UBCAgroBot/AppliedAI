@@ -3,17 +3,11 @@
 23-I-12_SysArch/Experiments/ishaan_workspace/install/
 23-I-12_SysArch/Experiments/ishaan_workspace/log/
 23-I-12_SysArch/Experiments/ishaan_workspace/src/examples/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/build/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/install/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/log/
-23-I-12_SysArch/Experiments/POC_test/cpp_test/include/
-
+23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__
 .vscode
 
 # Don't ignore src/pipeline
 !23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/jetson_node.cpython-38.pyc
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/camera_node.cpython-38.pyc
 23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/yolov5l6.pt
 
 # Yolobot specific:
@@ -257,4 +251,3 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/camera_node.cpython-38.pyc
