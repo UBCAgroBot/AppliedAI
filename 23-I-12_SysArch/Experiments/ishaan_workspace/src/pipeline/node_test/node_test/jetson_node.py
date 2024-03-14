@@ -9,7 +9,6 @@ import tensorrt as trt
 import pycuda.autoinit
 import pycuda.driver as cuda
 
-
 # from numba import jit
 # argparse for choosing model
 
