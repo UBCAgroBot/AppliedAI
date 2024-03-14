@@ -55,9 +55,10 @@ class JetsonNode(Node):
                 with open('yolov8x.onnx', 'rb') as model:
                     parser.parse(model.read())
             
-            # Check the number of output layers in the network
-            num_outputs = network.num_outputs
-            self.get_logger().info(f"Number of network outputs: {num_outputs}")
+            # If the network has no layers, print an error message and exit
+            if network.num_layers == 0:
+                self.get_logger().info("Error: The network has no layers")
+                raise SystemExit
 
             # If the network has no output layers, manually set the last layer as the output
             if num_outputs == 0:
