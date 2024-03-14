@@ -18,6 +18,7 @@ class CameraNode(Node):
         # replace self.camera with parameter
         self.index, self.camera, self.type = 0, True, "rgb8"
         self.model_publisher = self.create_publisher(Image, 'image_data', 10)
+        print(cv2.getBuildInformation())
 
         if self.camera == True:
             self.camera_publisher()
@@ -49,7 +50,7 @@ class CameraNode(Node):
         mat = sl.Mat()
         
         # Convert the numpy array to a CUDA GPU Mat
-        image_gpu = cv2.cuda_GpuMat()
+        # image_gpu = cv2.cuda_GpuMat()
         
         pre_mem = psutil.Process().memory_percent()
         key = ''
@@ -61,7 +62,7 @@ class CameraNode(Node):
                 raw_image = mat.get_data()
                 
                 # Convert the numpy array to a CUDA GPU Mat
-                # image_gpu = cv2.cuda_GpuMat()
+                image_gpu = cv2.cuda_GpuMat()
                 image_gpu.upload(raw_image)
                 
                 # Convert the image to RGB using CUDA
