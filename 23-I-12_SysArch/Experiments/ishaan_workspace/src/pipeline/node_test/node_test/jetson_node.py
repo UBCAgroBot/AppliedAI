@@ -1,12 +1,14 @@
 import time
 import os
 import psutil
-import cv2
-import tensorrt as trt
 
+import numpy as np
+import cv2
+
+import tensorrt as trt
 import pycuda.autoinit
 import pycuda.driver as cuda
-import numpy as np
+
 
 # from numba import jit
 # argparse for choosing model
@@ -45,17 +47,19 @@ class JetsonNode(Node):
             # Create a TensorRT builder
             builder = trt.Builder(TRT_LOGGER)
             
-            # Load the ONNX model
-            with open('yolov8x.onnx', 'rb') as f:
-                model = f.read()
-
-            # Parse the ONNX model
+            # Create a TensorRT network
             network = builder.create_network()
-            parser = trt.OnnxParser(network, TRT_LOGGER)
-            parser.parse(model)
+            
+            # Load the ONNX model into the network
+            with trt.OnnxParser(network, TRT_LOGGER) as parser:
+                with open('yolov8.onnx', 'rb') as model:
+                    parser.parse(model.read())
+
+            # Create a builder config
+            config = builder.create_builder_config()
 
             # Build the TensorRT engine
-            self.model = builder.build_cuda_engine(network)
+            self.model = builder.build_cuda_engine(network, config)
             
         except Exception as e:
             self.get_logger().info(f"Error: {e}")
