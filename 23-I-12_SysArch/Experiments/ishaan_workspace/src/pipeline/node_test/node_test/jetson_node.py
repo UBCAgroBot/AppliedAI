@@ -16,7 +16,7 @@ from rclpy.time import Time
 from rclpy.node import Node
 from std_msgs.msg import Header, String
 from sensor_msgs.msg import Image
-from BoundingBox.msg import BoundingBox
+from msg import BoundingBox
 from cv_bridge import CvBridge, CvBridgeError
 
 class JetsonNode(Node):

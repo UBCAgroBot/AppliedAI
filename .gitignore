@@ -3,12 +3,9 @@
 23-I-12_SysArch/Experiments/ishaan_workspace/install/
 23-I-12_SysArch/Experiments/ishaan_workspace/log/
 23-I-12_SysArch/Experiments/ishaan_workspace/src/examples/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__
+23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/
 .vscode
-
-# Don't ignore src/pipeline
 !23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/
-23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/yolov5l6.pt
 
 # Yolobot specific:
 *.jpg
