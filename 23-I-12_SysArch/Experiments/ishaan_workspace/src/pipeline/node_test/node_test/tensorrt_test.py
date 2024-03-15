@@ -26,8 +26,7 @@ def main():
             cam.retrieve_image(mat, sl.VIEW.LEFT)
             # Convert the image to a numpy array
             image_np = mat.get_data()
-            results = tensorrt_model(image_np)
-            results.show()
+            results = tensorrt_model(image_np, stream=True, show=True)
             # cv2.imshow("ZED", gray)
             key = cv2.waitKey(5)
         else:
