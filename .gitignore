@@ -249,3 +249,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/__pycache__/jetson_node.cpython-38.pyc
+23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/yolov8x_onnx.engine
+23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/yolov8x_pt.engine

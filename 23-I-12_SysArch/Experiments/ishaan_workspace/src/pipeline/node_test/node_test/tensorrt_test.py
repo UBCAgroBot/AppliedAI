@@ -1,6 +1,7 @@
 from ultralytics import YOLO
 import cv2
 import pyzed.sl as sl
+import time
 
 # from models.pycuda_api import TRTEngine
 
@@ -26,7 +27,9 @@ def main():
             cam.retrieve_image(mat, sl.VIEW.LEFT)
             # Convert the image to a numpy array
             image_np = mat.get_data()
+            tic = time.perf_counter_ns()
             results = tensorrt_model(image_np)
+            print(f"{time.perf_counter_ns() - tic}/1e6 ms")
             results.show()
             # cv2.imshow("ZED", gray)
             key = cv2.waitKey(5)
