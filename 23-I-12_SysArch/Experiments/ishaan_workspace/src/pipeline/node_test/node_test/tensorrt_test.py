@@ -2,12 +2,14 @@ from ultralytics import YOLO
 import cv2
 # import pyzed.sl as sl
 import time
+import os
 
 # from models.pycuda_api import TRTEngine
 
 def main():
+    os.chdir('/home/user/AppliedAI/23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test')
     tensorrt_model = YOLO('yolov8x_onnx.engine')
-
+    print(os.getcwd())
     # init = sl.InitParameters()
     # cam = sl.Camera()
     # if not cam.is_opened():
