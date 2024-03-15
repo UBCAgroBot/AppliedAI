@@ -28,7 +28,7 @@ def main():
             # Convert the image to a numpy array
             image_np = mat.get_data()
             tic = time.perf_counter_ns()
-            results = tensorrt_model(image_np)
+            results = tensorrt_model('city.mp4', stream=True, show=True)
             print(f"{time.perf_counter_ns() - tic}/1e6 ms")
             results.show()
             # cv2.imshow("ZED", gray)
