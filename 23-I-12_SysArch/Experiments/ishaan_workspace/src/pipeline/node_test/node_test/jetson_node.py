@@ -150,6 +150,7 @@ class JetsonNode(Node):
         
         # Reshape the output tensor to a 2D array
         output = output.reshape(-1, 7)
+        # control over confidence, min/max confidence, etc.
         # Split the output array into boxes, objectness scores, and class scores
         boxes = output[:, :4]  # Bounding box coordinates
         scores = output[:, 4]  # Objectness scores
@@ -182,6 +183,35 @@ class JetsonNode(Node):
         self.get_logger().info(f'Frame loss: {((self.frames/self.frame_id)*100):0.1f}')
         raise SystemExit
 
+
+# multithreading:  post processing/publisher node can run seperately than pre and inference nodes
+# def main(args=None):
+#     rclpy.init(args=args)
+#     image_subscriber = Image_subscriber()
+#     yolo_subscriber = Yolo_subscriber()
+    
+#     executor = rclpy.executors.MultiThreadedExecutor()
+#     executor.add_node(image_subscriber)
+#     executor.add_node(yolo_subscriber)
+    
+#     executor_thread = threading.Thread(target=executor.spin, daemon=True)
+#     executor_thread.start()
+#     rate = yolo_subscriber.create_rate(2) #idk what this does
+    
+#     try:
+#         while rclpy.ok():
+#             rate.sleep()
+#     except SystemExit:    
+#         yolo_subscriber.display_metrics()
+#         rclpy.logging.get_logger("Quitting").info('Done')
+
+#     rclpy.shutdown()
+#     executor_thread.join()
+
+# if __name__ == '__main__':
+#     main()
+
+
 def main(args=None):
     rclpy.init(args=args)
     jetson_node = JetsonNode()
@@ -204,3 +234,5 @@ def main(args=None):
 
 if __name__ == '__main__':
     main()
+    
+    
