@@ -11,17 +11,19 @@ from scripts.data.augmentations import get_transform
 from scripts.models import frcnn
 from scripts.config.config import CLASS_CODES_MAP
 import cv2
+import numpy as np
 
+THRESHOLD = 0.5
 device = torch.device('cpu')
 num_classes = 3
 
 # load model
 model = frcnn.get_model(num_classes)
 model.to(device)
-model.load_state_dict(torch.load('saved_models/model_frcnn_12.pth', map_location=torch.device('cpu')))
+model.load_state_dict(torch.load('saved_models/model_frcnn_32.pth', map_location=torch.device('cpu')))
 model.eval()
 
-IMAGE_DIR = 'data/blueberries/google_images'
+IMAGE_DIR = 'data/blueberries/test'
 
 image_and_xml_paths = os.listdir(IMAGE_DIR)
 image_paths = []
@@ -48,7 +50,19 @@ with torch.inference_mode():
         pred_boxes = pred["boxes"].long()
         pred_labels = [f"{CLASS_CODES_MAP[label]}: {score: .3f}" for label, score in \
                     zip(pred["labels"], pred["scores"])]
-        output_image = draw_bounding_boxes(image, pred_boxes, pred_labels, colors="red")
+        
+        # Apply thresholding to reduce low confidence bounding boxes
+        bool_idx_list = []
+        for idx in range(len(pred["scores"])):
+          if pred["scores"][idx] >= THRESHOLD:   
+            bool_idx_list.append(True)
+          else:   
+            bool_idx_list.append(False)
+        
+        pred_boxes = pred_boxes[bool_idx_list]
+        pred_labels = np.array(pred_labels)[bool_idx_list].tolist()
+
+        output_image = draw_bounding_boxes(image, pred_boxes, pred_labels, colors="blue")
         output_image_pmt = output_image.permute((1, 2, 0))
         output_image_np = output_image_pmt.numpy()
         output_image_bgr = cv2.cvtColor(output_image_np, cv2.COLOR_RGB2BGR)
