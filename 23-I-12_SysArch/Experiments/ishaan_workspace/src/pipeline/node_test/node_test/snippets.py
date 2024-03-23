@@ -383,3 +383,39 @@ tensorrt_model = YOLO('yolov8n.engine')
 
 # Run inference
 results = tensorrt_model('https://ultralytics.com/images/bus.jpg')
+
+#  Instead of passing an image, you just pass the BGR values you want. For example, to find the HSV value of Green, try the following commands in a Python terminal: 
+# >>> green = np.uint8([[[0,255,0 ]]])
+# >>> hsv_green = cv.cvtColor(green,cv.COLOR_BGR2HSV)
+# >>> print( hsv_green )
+# [[[ 60 255 255]]]
+# Now you take [H-10, 100,100] and [H+10, 255, 255] as the lower bound and upper bound respectively
+# BGR conversion?
+
+# >>> flags = [i for i in dir(cv2) if i.startswith('COLOR_')]
+# >>> len(flags)
+# 258
+# >>> flags[40]
+# 'COLOR_BGR2RGB'
+
+#     nemo = cv2.cvtColor(nemo, cv2.COLOR_BGR2RGB)
+# >>> plt.imshow(nemo)
+# >>> plt.show()
+# hsv_nemo = cv2.cvtColor(nemo, cv2.COLOR_RGB2HSV)
+
+# OpenCV by default reads images in BGR format
+
+# combining masks:
+# >>> final_mask = mask + mask_white
+
+# >>> blur = cv2.GaussianBlur(final_result, (7, 7), 0)
+# >>> plt.imshow(blur)
+# >>> plt.show()
+# gaussian blur or noise reduction
+
+# >>> final_result = cv2.bitwise_and(nemo, nemo, mask=final_mask)
+# >>> plt.subplot(1, 2, 1)
+# >>> plt.imshow(final_mask, cmap="gray")
+# >>> plt.subplot(1, 2, 2)
+# >>> plt.imshow(final_result)
+# >>> plt.show()
