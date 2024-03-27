@@ -9,6 +9,7 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header, String, Integer
 from cv_bridge import CvBridge, CvBridgeError
+import pyzed.sl as sl
 
 PUBLISH_RATE = 10
 LIGHT_GREEN = (78, 158, 124)
@@ -32,9 +33,18 @@ class CameraNode(Node):
         self.left_camera_subscriber # necessary?
         self.right_camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
         self.right_camera_subscriber
-        self.left_array_publisher = self.create_publisher(Integer, 'left_array_data', 10) # rate is 10 Hz?
+        self.timer = self.create_timer(0.1, self.timer_callback)
+        self.left_array_publisher = self.create_publisher(Integer, 'left_array_data', 10)
         self.right_array_publisher = self.create_publisher(Integer, 'right_array_data', 10)
 
+    def timer_callback(self):
+        Lmsg = Integer()
+        Lmsg.data = self.left.on
+        Rmsg = Integer()
+        Rmsg.data = self.right.on
+        self.left_array_publisher.publish(Lmsg)
+        self.right_array_publisher.publish(Rmsg)
+    
     def callback(self, msg):
         try:
             cv_image = self.bridge.imgmsg_to_cv2(msg, "rgb8")
@@ -72,18 +82,38 @@ class CameraNode(Node):
         width_cutoff = width // 2
         s1 = img[:, :width_cutoff]
         s2 = img[:, width_cutoff:]
-        height,width,depth = x.shape
-        return [x[height , :width//2] , x[height, width//2:]]
-        plt.imshow(imCrop(yourimage)[1])
     
-    def object_filter(self, side):
-        within = False
-        height, width, _ = self.image.shape
+    def object_filter(self, image, bounding_box):
+        height, width = self.image.shape
+        x1, y1, x2, y2 = bounding_box
+        
         # Extract Region of interest
-        roi = frame[340: 720,500: 800]
+        roi = image[y1:y2, x1:x2]
 
-        # 1. Object Detection
-        mask = object_detector.apply(roi)
+        # Apply color segmentation mask
+        hsv = cv2.cvtColor(self.image, cv2.COLOR_RGB2HSV)
+        mask = cv2.inRange(hsv,LIGHT_GREEN,DARK_GREEN)
+        result = cv2.bitwise_and(self.image,self.image, mask=mask) 
+        plt.subplot(1, 2, 1)
+        plt.imshow(mask, cmap="gray")
+        plt.subplot(1, 2, 2)
+        plt.imshow(result)
+        plt.show()
+        bbox = cv2.boundingRect(mask)
+        
+        if bbox is not None:
+            x, y, w, h = bbox
+            detections.append([x, y, w, h])
+            boxes_ids = self.tracker.update(detections)
+            for box_id in boxes_ids:
+                x, y, w, h, id = box_id
+                cv2.putText(roi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
+                cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
+        
+        cv2.imshow("roi", roi)
+        cv2.imshow("Frame", image)
+        cv2.imshow("Mask", mask)
+        
         _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)
         contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         detections = []
@@ -94,64 +124,28 @@ class CameraNode(Node):
                 #cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
                 x, y, w, h = cv2.boundingRect(cnt)
                 # this function will take cropped image w/ bounding box to clean it up
-    # def color_segmentation_mask(self):
-    #     lower_green = np.array([78,158,124])
-    #     upper_green = np.array([60, 255, 255])
-    #     hsv = cv2.cvtColor(self.image, cv2.COLOR_RGB2HSV) # image should be cropped w/ bounding box dimensions (cleaning each object box)
-    #     mask = cv2.inRange(hsv,lower_green,upper_green)
-    #     result = cv2.bitwise_and(self.image,self.image, mask=mask) 
-    #     plt.subplot(1, 2, 1)
-    #     plt.imshow(mask, cmap="gray")
-    #     plt.subplot(1, 2, 2)
-    #     plt.imshow(result)
-    #     plt.show()
-    #     bbox = cv2.boundingRect(mask)
-    #     if bbox is not None:
-    #         x, y, w, h = bbox
-    #         cv2.rectangle(self.image, (x, y), (x + w, y + h), (0, 255, 0), 2)
-
-
-                detections.append([x, y, w, h])
-
-        # 2. Object Tracking
-        boxes_ids = tracker.update(detections)
-        for box_id in boxes_ids:
-            x, y, w, h, id = box_id
-            cv2.putText(roi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
-            cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
-
-        cv2.imshow("roi", roi)
-        cv2.imshow("Frame", frame)
-        cv2.imshow("Mask", mask)
-
-        key = cv2.waitKey(30)
-        if key == 27:
-            break
         
-        # check if any of the four corners of the bounding box are within the ROI
-        if within and side == "left":
-            self.publish_
+        # need to transform bounding boxes relative to full size uncropped image
+    
+    def verify_object(self, bounding_box, side):
+        x1, y1, w, h = bounding_box
+        x2 = x1 + w
+        y2 = y1 + h
+        if x1 >= ROI_X and x1 <= ROI_X + ROI_W and y1 >= ROI_Y and y1 <= ROI_Y + ROI_H:
+            if side == "left":
+                self.left.on = 1
+            else:
+                self.right.on = 1
         else:
-            self.publish_array(0)
-    
-    def publish_array(self, status):
-        msg = Integer()
-        msg.data = 1
-        self.array_publisher.publish(msg)
-    
-    # Shift ROI to the left for more delay
-    # Not sure how to implement gaussian smoothing -> copilot
+            if side == "left":
+                self.left.on = 0
+            else:
+                self.right.on = 0
 
-# check if any of the four corners of the bounding box are within the ROI
-
-# if any bounding boxes found: increment count, if bounding box is found per frame, make publisher send 1, otherwise publisher sends 0
-# only need to add assigning IDs to each bounding box so each unique ID that enters ROI is counted once
-
-# filtering detections that are given from bounding box model
-# slider for delay (sleep timer between detection and publishing if bounding box found in area)
-# either way we are making only taking in bounding box coords, no need for tags there
+# slider for delay (sleep timer between detection and publishing if bounding box found in area) (shifts ROI more left for more delay)
 # one publisher for each camera, one subscriber for each camera
 
-# image thresholding
-# question for applying bounding box to cropped image for different bounding boxes found from primary detection? -> need to transform coordinates relative to the cropped image
-# try padding/running both images in model, but will likely be beter to turn two engine processes
+# test output for annotated filter vs refined cv filter
+
+# video, image slicer publisher in python
+# plant object detection in python using opencv, image net
