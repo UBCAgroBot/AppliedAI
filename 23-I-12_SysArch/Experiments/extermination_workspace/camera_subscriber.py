@@ -27,12 +27,10 @@ class CameraNode(Node):
         self.tracker = EuclideanDistTracker()
         self.queue = []
         self.image = None
-        
         self.left.on, self.right.on = 0, 0
+        
         self.left_camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
-        self.left_camera_subscriber # necessary?
         self.right_camera_subscriber = self.create_subscription(Image, 'image_data', self.callback, 10)
-        self.right_camera_subscriber
         self.timer = self.create_timer(0.1, self.timer_callback)
         self.left_array_publisher = self.create_publisher(Integer, 'left_array_data', 10)
         self.right_array_publisher = self.create_publisher(Integer, 'right_array_data', 10)
