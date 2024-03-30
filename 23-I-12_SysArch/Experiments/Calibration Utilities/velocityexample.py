@@ -5,6 +5,8 @@ import os
 import cv2
 import time
 
+# shift should be velocity * latency processing
+
 os.chdir('/Users/kori0909/Downloads')
 model = YOLO("yolov8n.pt")
 tracker = sv.ByteTrack()

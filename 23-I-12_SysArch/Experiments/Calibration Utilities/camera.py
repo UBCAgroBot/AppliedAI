@@ -1,3 +1,4 @@
+import pyzed.sl as sl
 import matplotlib.pyplot as plt
 import numpy as np
 import cv2
@@ -40,7 +41,28 @@ cv2.createTrackbar('width','roi calibration',width,width,onTrack2)
 cv2.createTrackbar('y pos','roi calibration',1,height-1,onTrack3)
 cv2.createTrackbar('height','roi calibration',height,height,onTrack4)
 
+init = sl.InitParameters()
+cam = sl.Camera()
+init.camera_resolution = sl.RESOLUTION.HD1080
+init.camera_fps = 30
+
+if not cam.is_opened():
+    print("Opening ZED Camera ")
+status = cam.open(init)
+if status != sl.ERROR_CODE.SUCCESS:
+    print(repr(status))
+    exit()
+
+runtime = sl.RuntimeParameters()
+mat = sl.Mat()
+
 while True:
+    err = cam.grab(runtime)
+    if err == sl.ERROR_CODE.SUCCESS:
+        cam.retrieve_image(mat, sl.VIEW.LEFT_UNRECTIFIED)
+        image = mat.get_data()
+        image = cv2.cvtColor(image, cv2.COLOR_RGBA2RGB)
+    
     frame = image[roi_y:roi_h+1, roi_x:roi_w+1]
     
     blank_image = np.zeros((window_height, window_width, 3), np.uint8)
@@ -53,4 +75,6 @@ while True:
     if cv2.waitKey(1) & 0xff ==ord('q'):
         break
 
+cam.close()
+print("ZED Camera closed")
 cv2.destroyAllWindows()

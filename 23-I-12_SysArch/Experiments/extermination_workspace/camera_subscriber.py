@@ -9,7 +9,6 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header, String, Integer
 from cv_bridge import CvBridge, CvBridgeError
-import pyzed.sl as sl
 
 PUBLISH_RATE = 10
 LIGHT_GREEN = (78, 158, 124)

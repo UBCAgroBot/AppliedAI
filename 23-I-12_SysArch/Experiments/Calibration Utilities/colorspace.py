@@ -1,11 +1,22 @@
 import matplotlib.pyplot as plt
 import matplotlib.colors
 import numpy as np
+import pandas as pd
 import cv2
 import os
 
 os.chdir("23-I-12_SysArch/Experiments/Calibration Utilities")
 image = cv2.imread("test.jpg")
+
+df = pd.read_csv('values.csv')
+
+default_hue_light = df['hue_light'][0]
+default_sat_light = df['sat_light'][0]
+default_val_light = df['val_light'][0]
+default_hue_dark = df['hue_dark'][0]
+default_sat_dark = df['sat_dark'][0]
+default_val_dark = df['val_dark'][0]
+default_area = df['area'][0]
 
 height, width, _ = image.shape 
 window_height, window_width = height, width
@@ -52,13 +63,13 @@ cv2.namedWindow('colorspace calibration', cv2.WINDOW_NORMAL)
 cv2.resizeWindow('colorspace calibration', window_width, window_height)
 cv2.moveWindow('colorspace calibration',0,0)
 
-cv2.createTrackbar('Hue Low','colorspace calibration',10,179,onTrack1)
-cv2.createTrackbar('Hue High','colorspace calibration',20,179,onTrack2)
-cv2.createTrackbar('Sat Low','colorspace calibration',10,255,onTrack3)
-cv2.createTrackbar('Sat High','colorspace calibration',250,255,onTrack4)
-cv2.createTrackbar('Val Low','colorspace calibration',10,255,onTrack5)
-cv2.createTrackbar('Val High','colorspace calibration',250,255,onTrack6)
-cv2.createTrackbar('Area','colorspace calibration',100,window_height*window_width,onTrack7)
+cv2.createTrackbar('Hue Low','colorspace calibration',default_hue_light,179,onTrack1)
+cv2.createTrackbar('Hue High','colorspace calibration',default_hue_dark,179,onTrack2)
+cv2.createTrackbar('Sat Low','colorspace calibration',default_sat_light,255,onTrack3)
+cv2.createTrackbar('Sat High','colorspace calibration',default_sat_dark,255,onTrack4)
+cv2.createTrackbar('Val Low','colorspace calibration',default_val_light,255,onTrack5)
+cv2.createTrackbar('Val High','colorspace calibration',default_val_dark,255,onTrack6)
+cv2.createTrackbar('Area','colorspace calibration',default_area,window_height*window_width,onTrack7)
 
 while True:
     frameHSV=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
@@ -82,14 +93,22 @@ while True:
         cv2.drawContours(myObject, [cnt], -1, (0, 0, 255), 1)
         if cv2.contourArea(cnt) > 100:
             x, y, w, h = cv2.boundingRect(cnt)
-            if w * h > area and max(w/h , h/w) < 5:
+            if (w * h) > area and max(w/h , h/w) < 5 and (w * h) < (window_height * window_width / 4):
                 print(w*h)
-                cv2.rectangle(myObject, (x, y), (x + w, y + h), (0, 255, 0), 1)
+                cv2.rectangle(myObject, (x, y), (x + w, y + h), (0, 255, 0), 2)
     
     frame = cv2.hconcat([myObject, color_square])
     cv2.imshow('colorspace calibration', frame)
     
     if cv2.waitKey(1) & 0xff ==ord('q'):
+        df['hue_light'][0] = hue_light
+        df['sat_light'][0] = sat_light
+        df['val_light'][0] = val_light
+        df['hue_dark'][0] = hue_dark
+        df['sat_dark'][0] = sat_dark
+        df['val_dark'][0] = val_dark
+        df['area'][0] = area
+        df.to_csv('values.csv', index=False)
         break
 
 cv2.destroyAllWindows()
