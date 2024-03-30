@@ -121,8 +121,6 @@ class CameraNode(Node):
                 #cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
                 x, y, w, h = cv2.boundingRect(cnt)
                 # this function will take cropped image w/ bounding box to clean it up
-        
-        # need to transform bounding boxes relative to full size uncropped image
     
     def verify_object(self, bounding_box, side):
         x1, y1, w, h = bounding_box
@@ -138,11 +136,3 @@ class CameraNode(Node):
                 self.left.on = 0
             else:
                 self.right.on = 0
-
-# slider for delay (sleep timer between detection and publishing if bounding box found in area) (shifts ROI more left for more delay)
-# one publisher for each camera, one subscriber for each camera
-
-# test output for annotated filter vs refined cv filter
-
-# video, image slicer publisher in python
-# plant object detection in python using opencv, image net
