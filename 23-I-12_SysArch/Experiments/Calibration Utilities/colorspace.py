@@ -28,6 +28,8 @@ hue_dark = 250
 sat_dark = 10
 val_dark = 250
 area = 100
+draw_countours = True
+draw_rectangles = True
 
 def onTrack1(val):
     global hue_light
@@ -57,6 +59,13 @@ def onTrack7(val):
     global area
     area=val
     print('Area',area)
+def toggle_contours(val):
+    global draw_contours
+    draw_contours = not draw_contours
+def toggle_rectangles(val):
+    global draw_rectangles
+    draw_rectangles = not draw_rectangles
+
 
 
 cv2.namedWindow('colorspace calibration', cv2.WINDOW_NORMAL)
@@ -70,6 +79,8 @@ cv2.createTrackbar('Sat High','colorspace calibration',default_sat_dark,255,onTr
 cv2.createTrackbar('Val Low','colorspace calibration',default_val_light,255,onTrack5)
 cv2.createTrackbar('Val High','colorspace calibration',default_val_dark,255,onTrack6)
 cv2.createTrackbar('Area','colorspace calibration',default_area,window_height*window_width,onTrack7)
+cv2.createButton("Toggle Contours", toggle_contours, None, cv2.QT_PUSH_BUTTON, 1)
+cv2.createButton("Toggle Rectangles", toggle_rectangles, None, cv2.QT_PUSH_BUTTON, 1)
 
 while True:
     frameHSV=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
@@ -90,12 +101,13 @@ while True:
 
     contours, _ = cv2.findContours(myMask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     for cnt in contours:
-        cv2.drawContours(myObject, [cnt], -1, (0, 0, 255), 1)
-        if cv2.contourArea(cnt) > 100:
+        if draw_countours:
+            cv2.drawContours(myObject, [cnt], -1, (0, 0, 255), 1)
+        if cv2.contourArea(cnt) > 1000:
             x, y, w, h = cv2.boundingRect(cnt)
-            if (w * h) > area and max(w/h , h/w) < 5 and (w * h) < (window_height * window_width / 4):
-                print(w*h)
-                cv2.rectangle(myObject, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            if draw_rectangles:
+                if (w * h) > area and max(w/h , h/w) < 5 and (w * h) < (window_height * window_width / 4):
+                    cv2.rectangle(myObject, (x, y), (x + w, y + h), (0, 255, 0), 2)
     
     frame = cv2.hconcat([myObject, color_square])
     cv2.imshow('colorspace calibration', frame)
