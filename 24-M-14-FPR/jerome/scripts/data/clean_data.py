@@ -3,6 +3,9 @@ import os
 from tqdm import tqdm
 from os.path import exists
 import shutil
+import matplotlib.pyplot as plt
+import cv2
+from collections import Counter
 
 IMAGE_DIR = '../../data/blueberries/all_data'
 TRAIN_COUNTER = 8
@@ -16,6 +19,91 @@ def listdir_nohidden(path):
     for f in os.listdir(path):
         if not f.startswith('.'):
             yield f
+
+def get_image_size_histogram():
+    images_and_xml = list(sorted(listdir_nohidden(IMAGE_DIR)))
+
+    data = []
+    widths = []
+    heights = []
+
+    for dir in tqdm([TRAIN_DIR, TEST_DIR, VALIDATE_DIR]):
+      images_and_xml = list(sorted(listdir_nohidden(dir)))
+      for idx in tqdm(range(0, len(images_and_xml), 2)):
+        jpg_path = dir + '/' + images_and_xml[idx]
+        image = cv2.imread(jpg_path)
+
+        if image is None:
+          continue
+
+        # cv2.imread returns an empty matrix if it is unable to read the image
+        if len(image) == 0:
+          continue
+
+        height = image.shape[0]
+        width = image.shape[1]
+        area = height * width 
+
+        widths.append(width)
+        heights.append(height)
+        data.append(area)
+
+    fig = plt.figure(figsize=(20, 6))
+
+    counter = Counter(data)
+    x = list(counter.keys())
+    y = list(counter.values())
+    width = (max(x) - min(x)) / len(x)
+
+    ax1 = fig.add_subplot(3, 1, 1) 
+    ax1.bar(x, y, width)
+    # since data range is humongous
+    ax1.set_xscale('log')
+    ax1.set_yscale('log')
+    ax1.set_xlabel('Image Area')
+    ax1.set_ylabel('Frequency')
+    ax1.set_title('Image Size Frequencies')
+
+    """
+    xticks = [10e1, 10e2, 10e3]
+    xticklabels = ['10¹', '10²', '10³']
+    yticks = [10e1, 10e2, 10e3]
+    yticklabels = ['10¹', '10²', '10³']
+    ax2.set_xticks(xticks, xticklabels)
+    ax2.set_yticks(yticks, yticklabels)
+    """
+    ax2 = fig.add_subplot(3, 1, 2) 
+
+    counter = Counter(widths)
+    x1 = list(counter.keys())
+    y1 = list(counter.values())
+    width = (max(x1) - min(x1)) / len(x1)
+    ax2.bar(x1, y1, width)
+    ax2.set_xscale('log')
+    ax2.set_yscale('log')
+    xticks = [10e1, 10e2, 10e3]
+    xticklabels = ['10¹', '10²', '10³']
+    ax2.set_xticks(xticks, xticklabels)
+    ax2.set_xlabel('Side Dimension')
+    ax2.set_ylabel('Frequency')
+    ax2.set_title('Side Dimension Magnitude vs Frequency')
+
+    ax3 = fig.add_subplot(3, 1, 3) 
+    counts = [ sum(1 for width, height in zip(widths, heights) if width == height),
+               sum(1 for width, height in zip(widths, heights) if width != height) ]
+
+    # THIS LOGIC MIGHT BE WRONG!!!
+    print(counts[0])
+    print(counts[1])
+    categories = ["Match", "No Match"]
+    ax3.bar(categories, counts)
+    ax3.set_xlabel('Match or No Match')
+    ax3.set_ylabel('Number')
+    ax3.set_title('Does width == height?')
+
+
+    plt.tight_layout()
+    plt.show()
 
 def restore_data():
     for dir in [TRAIN_DIR, TEST_DIR, VALIDATE_DIR]:
@@ -106,8 +194,7 @@ def remove_singles():
         except:
           print("a")
 
-split_data()
-
+get_image_size_histogram()
 
 """
 def parse_xml(xml_file_path):

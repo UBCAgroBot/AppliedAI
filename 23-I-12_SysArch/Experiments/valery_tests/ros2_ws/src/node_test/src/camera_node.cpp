@@ -12,6 +12,7 @@
 
 // #include <onnxruntime_c_api.h>
 
+#include <sys/resource.h>
 
 using namespace std::chrono_literals;
 using namespace cv;
@@ -23,17 +24,17 @@ class MinimalPublisher : public rclcpp::Node
 {
 public:
   MinimalPublisher()
-  : Node("minimal_publisher"), count_(0)
+  : Node("camera_node"), count_(0)
   {
-    publisher_ = this->create_publisher<sensor_msgs::msg::Image>("topic", 10);
+    camera_image_ = this->create_publisher<sensor_msgs::msg::Image>("camera_image", 10);
     timer_ = this->create_wall_timer(
-      500ms, std::bind(&MinimalPublisher::timer_callback, this));
+      3000ms, std::bind(&MinimalPublisher::picture_publisher, this));
   }
 
 private:
-  void timer_callback()
+  void picture_publisher()
   {
-    cv::Mat image = cv::imread("ros2_ws/src/onnx_cpp/src/images/mnist_"+ std::to_string(count_ % 10)+ ".png");
+    cv::Mat image = cv::imread("src/node_test/src/images/mnist_"+ std::to_string(count_ % 10)+ ".png");
 
     if (image.empty()) {
       RCLCPP_ERROR(this->get_logger(), "Image  NOT  found");
@@ -50,14 +51,36 @@ private:
 
     auto message = std_msgs::msg::String();
     RCLCPP_INFO(this->get_logger(), "Publishing and working: '%s'", header.frame_id.c_str());
-    publisher_->publish(out_image);
+    camera_image_->publish(out_image);
 
+    checkRAMUsage();
 
   }
+
+
+// takes in image message and converts into datatype for onnx model
+  void checkRAMUsage() const{
+    struct rusage r_usage;
+
+    // Get resource usage
+    if (getrusage(RUSAGE_SELF, &r_usage) != 0) {
+        RCLCPP_INFO(this->get_logger(), "Error: Unable to get resource usage.");
+  }
+
+    // Memory usage in kilobytes
+    long memory_usage = r_usage.ru_maxrss;
+
+    // Convert memory usage to megabytes
+    double memory_usage_mb = static_cast<double>(memory_usage) / 1024.0;
+    RCLCPP_INFO(this->get_logger(), "Memory Usage: %.2f", memory_usage_mb);
+}
+
+
   rclcpp::TimerBase::SharedPtr timer_;
-  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr publisher_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr camera_image_;
   size_t count_;
 };
+
 
 int main(int argc, char * argv[])
 {

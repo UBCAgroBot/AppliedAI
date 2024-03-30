@@ -59,9 +59,11 @@ def train_and_evaluate_frcnn():
         print(f"--- TRAINING EPOCH {epoch} ---")
         train_one_epoch(model, optimizer, data_loader_train, device, epoch, print_freq=10)
         lr_scheduler.step()
+        # Comment out 2 lines below for faster training
         print(f'--- EVAULATING MODEL FOR EPOCH {epoch} ----')
         evaluate(model, data_loader_test, device=device)
         if epoch % 2 == 0:
+          # Increase interval between saves for faster training
           print(f'--- SAVING THE MODEL ---')
           torch.save(model.state_dict(), f'./saved_models/model_frcnn_{epoch}.pth')
 

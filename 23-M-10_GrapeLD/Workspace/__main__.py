@@ -100,7 +100,7 @@ def init_model(data, callbacks):
         loss="categorical_crossentropy",
         metrics=["acc"],
     )
-    
+
     return model
 
 
