@@ -3,17 +3,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 import os
+import pandas as pd
 
 os.chdir("23-I-12_SysArch/Experiments/Calibration Utilities")
 image = cv2.imread("test.jpg")
 
-height, width, _ = image.shape 
-window_height, window_width = height, width
+df = pd.read_csv('values.csv')
 
-roi_x = 1
-roi_w = width
-roi_y = 1
-roi_h = height
+default_brightness = df['brightness'][0]
+default_contrast = df['contrast'][0]
+default_hue = df['hue'][0]
+default_saturation = df['saturation'][0]
+default_sharpness = df['sharpness'][0]
+default_gamma = df['gamma'][0]
+default_gain = df['gain'][0]
 
 def onTrack1(val):
     global roi_x
@@ -27,6 +30,10 @@ def onTrack3(val):
     global roi_y
     roi_y=val
     print('roi y',roi_y)
+def onTrack4(val):
+    global roi_h
+    roi_h=val
+    print('roi h',roi_h)
 def onTrack4(val):
     global roi_h
     roi_h=val

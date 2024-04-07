@@ -28,44 +28,36 @@ hue_dark = 250
 sat_dark = 10
 val_dark = 250
 area = 100
-draw_countours = True
-draw_rectangles = True
+draw_countours = 1
+draw_rectangles = 1
 
 def onTrack1(val):
     global hue_light
     hue_light=val
-    print('Hue Low',hue_light)
 def onTrack2(val):
     global hue_dark
     hue_dark=val
-    print('Hue High',hue_dark)
 def onTrack3(val):
     global sat_light
     sat_light=val
-    print('Sat Low',sat_light)
 def onTrack4(val):
     global sat_dark
     sat_dark=val
-    print('Sat High',sat_dark)
 def onTrack5(val):
     global val_light
     val_light=val
-    print('Val Low',val_light)
 def onTrack6(val):
     global val_dark
     val_dark=val
-    print('Val High',val_dark)
 def onTrack7(val):
     global area
     area=val
-    print('Area',area)
-def toggle_contours(val):
-    global draw_contours
-    draw_contours = not draw_contours
-def toggle_rectangles(val):
+def onTrack8(val):
+    global draw_countours
+    draw_countours=val
+def onTrack9(val):
     global draw_rectangles
-    draw_rectangles = not draw_rectangles
-
+    draw_rectangles=val
 
 
 cv2.namedWindow('colorspace calibration', cv2.WINDOW_NORMAL)
@@ -79,8 +71,8 @@ cv2.createTrackbar('Sat High','colorspace calibration',default_sat_dark,255,onTr
 cv2.createTrackbar('Val Low','colorspace calibration',default_val_light,255,onTrack5)
 cv2.createTrackbar('Val High','colorspace calibration',default_val_dark,255,onTrack6)
 cv2.createTrackbar('Area','colorspace calibration',default_area,window_height*window_width,onTrack7)
-cv2.createButton("Toggle Contours", toggle_contours, None, cv2.QT_PUSH_BUTTON, 1)
-cv2.createButton("Toggle Rectangles", toggle_rectangles, None, cv2.QT_PUSH_BUTTON, 1)
+cv2.createTrackbar('Contours','colorspace calibration',1,1,onTrack8)
+cv2.createTrackbar('Rectangles','colorspace calibration',1,1,onTrack9)
 
 while True:
     frameHSV=cv2.cvtColor(image,cv2.COLOR_BGR2HSV)
@@ -90,8 +82,10 @@ while True:
     
     lo_square = np.full((int(window_height/2), int(window_width//5), 3), [hue_light,sat_light,val_light], dtype=np.uint8) / 255.0
     do_square = np.full((int(window_height/2), int(window_width//5), 3), [hue_dark,sat_dark,val_dark], dtype=np.uint8) / 255.0
+    
     lo_square_rgb = matplotlib.colors.hsv_to_rgb(lo_square)
     do_square_rgb = matplotlib.colors.hsv_to_rgb(do_square)
+    
     lo_square_bgr = cv2.cvtColor((lo_square_rgb* 255).astype('uint8'), cv2.COLOR_RGB2BGR)
     do_square_bgr = cv2.cvtColor((do_square_rgb* 255).astype('uint8'), cv2.COLOR_RGB2BGR)
     color_square = cv2.vconcat([lo_square_bgr, do_square_bgr])
