@@ -16,6 +16,7 @@
 *.mlmodel
 *.torchscript
 
+# other jetson specific  
 __pycache__/
 23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/yolov8x_onnx.engine
 23-I-12_SysArch/Experiments/ishaan_workspace/src/pipeline/node_test/node_test/yolov8x_pt.engine
