@@ -11,6 +11,7 @@ This package is used to test the runtime of implementing a ros2 package with cpp
 1. navigate to the `ros2_ws` directory
 ```bash
 rosdep install --from-paths src -y --ignore-src
+colcon build --packages-select custom_interface
 colcon build --packages-select node_test
 ```
 
