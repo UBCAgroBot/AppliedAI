@@ -80,48 +80,59 @@ class CameraNode(Node):
         s1 = img[:, :width_cutoff]
         s2 = img[:, width_cutoff:]
     
-    def object_filter(self, image, bounding_box):
-        height, width = self.image.shape
-        x1, y1, x2, y2 = bounding_box
+    # def object_filter(self, image, bounding_box):
+    #     height, width = self.image.shape
+    #     x1, y1, x2, y2 = bounding_box
         
-        # Extract Region of interest
-        roi = image[y1:y2, x1:x2]
+    #     # Extract Region of interest
+    #     roi = image[y1:y2, x1:x2]
 
-        # Apply color segmentation mask
-        hsv = cv2.cvtColor(self.image, cv2.COLOR_RGB2HSV)
-        mask = cv2.inRange(hsv,LIGHT_GREEN,DARK_GREEN)
-        result = cv2.bitwise_and(self.image,self.image, mask=mask) 
-        plt.subplot(1, 2, 1)
-        plt.imshow(mask, cmap="gray")
-        plt.subplot(1, 2, 2)
-        plt.imshow(result)
-        plt.show()
-        bbox = cv2.boundingRect(mask)
+    #     # Apply color segmentation mask
+    #     hsv = cv2.cvtColor(self.image, cv2.COLOR_RGB2HSV)
+    #     mask = cv2.inRange(hsv,LIGHT_GREEN,DARK_GREEN)
+    #     result = cv2.bitwise_and(self.image,self.image, mask=mask) 
+    #     plt.subplot(1, 2, 1)
+    #     plt.imshow(mask, cmap="gray")
+    #     plt.subplot(1, 2, 2)
+    #     plt.imshow(result)
+    #     plt.show()
+    #     bbox = cv2.boundingRect(mask)
         
-        if bbox is not None:
-            x, y, w, h = bbox
-            detections.append([x, y, w, h])
-            boxes_ids = self.tracker.update(detections)
-            for box_id in boxes_ids:
-                x, y, w, h, id = box_id
-                cv2.putText(roi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
-                cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
+    #     if bbox is not None:
+    #         x, y, w, h = bbox
+    #         detections.append([x, y, w, h])
+    #         boxes_ids = self.tracker.update(detections)
+    #         for box_id in boxes_ids:
+    #             x, y, w, h, id = box_id
+    #             cv2.putText(roi, str(id), (x, y - 15), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 2)
+    #             cv2.rectangle(roi, (x, y), (x + w, y + h), (0, 255, 0), 3)
         
-        cv2.imshow("roi", roi)
-        cv2.imshow("Frame", image)
-        cv2.imshow("Mask", mask)
+    #     cv2.imshow("roi", roi)
+    #     cv2.imshow("Frame", image)
+    #     cv2.imshow("Mask", mask)
         
-        _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)
-        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-        detections = []
-        for cnt in contours:
-            # Calculate area and remove small elements
-            area = cv2.contourArea(cnt)
-            if area > 100:
-                #cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
-                x, y, w, h = cv2.boundingRect(cnt)
-                # this function will take cropped image w/ bounding box to clean it up
+    #     _, mask = cv2.threshold(mask, 254, 255, cv2.THRESH_BINARY)
+    #     contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    #     detections = []
+    #     for cnt in contours:
+    #         # Calculate area and remove small elements
+    #         area = cv2.contourArea(cnt)
+    #         if area > 100:
+    #             #cv2.drawContours(roi, [cnt], -1, (0, 255, 0), 2)
+    #             x, y, w, h = cv2.boundingRect(cnt)
+    #             # this function will take cropped image w/ bounding box to clean it up
     
+    from object_filter import object_filter
+    def object_filter(self, image, bounding_box):
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        detections = object_filter(rgb_image, bounding_box)
+        for detection in detections:
+            x, y, w, h = detection
+            cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 3)
+        
+        cv2.imshow("Processed Image", image)
+        cv2.waitKey(1)
+
     def verify_object(self, bounding_box, side):
         x1, y1, w, h = bounding_box
         x2 = x1 + w
