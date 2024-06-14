@@ -32,24 +32,44 @@ if __name__ == "__main__":
                 writer.writerow(stats)
                 print("Log at {time}".format(time=stats['time']))
                 if args.verbose:
-                    print(jetson.cpu['total']['user'])
-                    print(jetson.cpu['total']['system'])
-                    print(jetson.cpu['total']['idle'])
-                    print(jetson.cpu['cpu']['freq'])
-                    for name, data in jetson.memory.items():
-                        print("------ {name} ------".format(name=name))
-                        print(data)
-                    for name, data in jetson.gpu.items():
-                        print("------ {name} ------".format(name=name))
-                        print(data)
-                    for key, value in jetson.cpu['total'].items():
-                        print("{key}: {value}".format(key=key, value=value))
-                    for name, data in jetson.temperature.items():
-                        print("------ {name} ------".format(name=name))
-                        print(data)
-                    for name, data in jetson.power.items():
-                        print("------ {name} ------".format(name=name))
-                        print(data)
+                    # user_cpu = jetson.cpu['total']['user']
+                    # system_cpu = jetson.cpu['total']['system']
+                    # idle_cpu = jetson.cpu['total']['idle']
+                    # cpu = 1 - (idle_cpu/(user_cpu + system_cpu + idle_cpu))
+                    cpu_usage = 1 - jetson.cpu['total']['idle']
+                    memory_usage = (jetson.memory['used']/jetson.memory['total'])*100
+                    gpu_usage = (jetson.gpu['status']['load'])
+                    gpu_frequency = (jetson.gpu['freq']['cur'])
+                    cpu_temp = (jetson.temperature['CPU']['temp'])
+                    gpu_temp = (jetson.temperature['GPU']['temp'])
+                    system_voltage = (jetson.power['tot']['volt'])
+                    system_current = (jetson.power['tot']['curr'])
+                    system_power = (jetson.power['tot']['power'])
+                    
+                    print(f"CPU Usage: {cpu_usage}%")
+                    print(f"Memory Usage: {memory_usage}%")
+                    print(f"GPU Usage: {gpu_usage}%")
+                    print(f"GPU Frequency: {gpu_frequency} MHz")
+                    print(f"CPU Temperature: {cpu_temp}°C")
+                    print(f"GPU Temperature: {gpu_temp}°C")
+                    print(f"System Voltage: {system_voltage} V")
+                    print(f"System Current: {system_current} A")
+                    print(f"System Power: {system_power} W")
+                    
+                    # for name, data in jetson.memory.items():
+                    #     print("------ {name} ------".format(name=name))
+                    #     print(data)
+                    # for name, data in jetson.gpu.items():
+                    #     print("------ {name} ------".format(name=name))
+                    #     print(data)
+                    # for key, value in jetson.cpu['total'].items():
+                    #     print("{key}: {value}".format(key=key, value=value))
+                    # for name, data in jetson.temperature.items():
+                    #     print("------ {name} ------".format(name=name))
+                    #     print(data)
+                    # for name, data in jetson.power.items():
+                    #     print("------ {name} ------".format(name=name))
+                    #     print(data)
                     
                 count += 1
                 time.sleep(1)
