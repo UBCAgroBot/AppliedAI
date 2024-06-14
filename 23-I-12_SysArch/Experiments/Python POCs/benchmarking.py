@@ -37,9 +37,9 @@ if __name__ == "__main__":
                     # idle_cpu = jetson.cpu['total']['idle']
                     # cpu = 1 - (idle_cpu/(user_cpu + system_cpu + idle_cpu))
                     cpu_usage = 1 - jetson.cpu['total']['idle']
-                    memory_usage = (jetson.memory['used']/jetson.memory['total'])*100
-                    gpu_usage = (jetson.gpu['status']['load'])
-                    gpu_frequency = (jetson.gpu['freq']['cur'])
+                    memory_usage = (jetson.memory['RAM']['used']/jetson.memory['total'])*100
+                    gpu_usage = (jetson.gpu['ga10b']['status']['load'])
+                    gpu_frequency = (jetson.gpu['ga10b']['freq']['cur'])
                     cpu_temp = (jetson.temperature['CPU']['temp'])
                     gpu_temp = (jetson.temperature['GPU']['temp'])
                     system_voltage = (jetson.power['tot']['volt'])
