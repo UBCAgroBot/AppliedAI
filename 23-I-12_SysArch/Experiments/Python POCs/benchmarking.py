@@ -32,30 +32,26 @@ if __name__ == "__main__":
                 writer.writerow(stats)
                 print("Log at {time}".format(time=stats['time']))
                 if args.verbose:
-                    # for key, value in stats.items():
-                    #     print("{key}: {value}".format(key=key, value=value))
-                    print(jetson.cpu)
-                    print(jetson.gpu)
-                    print(jetson.memory)
-                    print(jetson.temperature)
-                    print(jetson.power)
+                    print(jetson.cpu['total']['user'])
+                    print(jetson.cpu['total']['system'])
+                    print(jetson.cpu['total']['idle'])
+                    print(jetson.cpu['freq'])
+                    for name, data in jetson.memory.items():
+                        print("------ {name} ------".format(name=name))
+                        print(data)
+                    for name, data in jetson.gpu.items():
+                        print("------ {name} ------".format(name=name))
+                        print(data)
+                    for key, value in jetson.cpu['total'].items():
+                        print("{key}: {value}".format(key=key, value=value))
+                    for name, data in jetson.temperature.items():
+                        print("------ {name} ------".format(name=name))
+                        print(data)
+                    for name, data in jetson.power.items():
+                        print("------ {name} ------".format(name=name))
+                        print(data)
+                    
                 count += 1
                 time.sleep(1)
     
     print("Logging finished")
-            
-                # for idx, cpu in enumerate(jetson.cpu['cpu']):
-                #     print("------ CPU{idx} ------".format(idx=idx))
-                #     for key, value in cpu.items():
-                #         print("{key}: {value}".format(key=key, value=value))
-                # total = jetson.cpu['total']
-                # print("------ TOTAL ------")
-                # for key, value in total.items():
-                #     print("{key}: {value}".format(key=key, value=value))
-                
-                # for name, data in jetson.memory.items():
-                #     print("------ {name} ------".format(name=name))
-                #     print(data)
-                # for name, data in jetson.gpu.items():
-                #     print("------ {name} ------".format(name=name))
-                #     print(data)
