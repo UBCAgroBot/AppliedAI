@@ -35,7 +35,7 @@ if __name__ == "__main__":
                     print(jetson.cpu['total']['user'])
                     print(jetson.cpu['total']['system'])
                     print(jetson.cpu['total']['idle'])
-                    print(jetson.cpu['freq'])
+                    print(jetson.cpu['cpu']['freq'])
                     for name, data in jetson.memory.items():
                         print("------ {name} ------".format(name=name))
                         print(data)
