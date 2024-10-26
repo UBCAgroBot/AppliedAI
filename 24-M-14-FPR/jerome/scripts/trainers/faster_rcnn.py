@@ -3,7 +3,10 @@ from scripts.data.augmentations import get_transform
 from scripts.data.xml_dataset import XMLDatasetPyTorch
 from scripts.models.frcnn import get_model
 from scripts.helpers import utils
-from scripts.config.config import TRAIN_DIR, TEST_DIR, VALIDATE_DIR, NUM_CORES
+from scripts.config.config import TRAIN_DIR, TEST_DIR, VALIDATE_DIR,\
+        NUM_CORES, NUM_EPOCHS
+from scripts.logging.wandb import initialize_wandb, create_run, log_train_loss, log_val_loss, \
+        log_epoch, increment_step
 import torch
 from tqdm import tqdm
 
@@ -51,11 +54,9 @@ def train_and_evaluate_frcnn():
             gamma=0.1 # every 3 epochs, multiple currently learning rate by 0.1
     )
 
-    num_epochs = 30
-
     print(f'--- TRAINING ALL EPOCHS ---')
 
-    for epoch in tqdm(range(num_epochs)):
+    for epoch in tqdm(range(NUM_EPOCHS)):
         print(f"--- TRAINING EPOCH {epoch} ---")
         train_one_epoch(model, optimizer, data_loader_train, device, epoch, print_freq=10)
         lr_scheduler.step()
